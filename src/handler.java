@@ -8,18 +8,19 @@ import javax.websocket.OnOpen;
 public class handler {
 	 @OnOpen
 	 public void onOpen() {
-		 
+		 System.out.println("Connection Found!");
 	 }
 	 
 	 @OnClose
 	 public void onClose() {
-		 
+		 System.out.println("Connection Ended");
 	 }
 	 
 	 @OnMessage
-	 public void onMessage(String message) {
+	 public String onMessage(String message) {
 		 System.out.println(message);
 		 RequestHandler.handleRequest(message);
+		 return "blah";
 	 }
 	 
 	 @OnError
