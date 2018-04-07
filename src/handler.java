@@ -3,6 +3,7 @@ import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
+import javax.websocket.Session;
 
 @ServerEndpoint("/socketHandler")
 public class handler {
@@ -17,10 +18,9 @@ public class handler {
 	 }
 	 
 	 @OnMessage
-	 public String onMessage(String message) {
+	 public void onMessage(String message, Session session) {
 		 System.out.println(message);
-		 RequestHandler.handleRequest(message);
-		 return "blah";
+		 RequestHandler.handleRequest(message, session);
 	 }
 	 
 	 @OnError
