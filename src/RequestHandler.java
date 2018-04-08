@@ -14,7 +14,6 @@ public class RequestHandler {
 	 */
 	public static int handleRequest(String message, Session session) {
 		// Parse string into JSONObject
-		System.out.println("handling...");
 		JSONObject request;
 		try {
 			request = (JSONObject) new JSONParser().parse(message);
@@ -51,10 +50,15 @@ public class RequestHandler {
 			System.out.println("Unknown request type: " + request.get("type"));
 			return 1;
 		}
-		
-		//return 0;
 	}
 	
+	/**
+	 * Sends a "card" to the client
+	 * 
+	 * @param request JSONObject representing the request made
+	 * @param user The user requesting the page
+	 * @return 0 if successful, 1 if not
+	 */
 	private static int getPage(JSONObject request, User user) {
 		JSONObject response = new JSONObject();
 		response.put("id", user.getId());

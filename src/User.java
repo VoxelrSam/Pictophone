@@ -29,6 +29,7 @@ public class User {
 	
 	/**
 	 * Send a JSON message to the user
+	 * 
 	 * @param message the JSONObject representing the message to be sent
 	 * @return 0 if success, 1 if something went wrong.
 	 */
@@ -41,7 +42,6 @@ public class User {
 			
 			return 1;
 		}
-		
 		return 0;
 	}
 	

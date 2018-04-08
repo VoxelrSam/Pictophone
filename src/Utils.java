@@ -20,6 +20,12 @@ public class Utils {
 		return key;
 	}
 	
+	/**
+	 * Puts the entire contents of a file into a string (for sending "cards" mainly)
+	 * 
+	 * @param fileName Name of the file to be sent
+	 * @return 0 if successful, 1 if not
+	 */
 	public static String getFileContents(String fileName) {
 		System.out.println(System.getProperty("user.dir"));
 		
