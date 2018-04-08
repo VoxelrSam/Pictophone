@@ -1,0 +1,36 @@
+* {
+	padding: 0px;
+	margin: 0px;
+}
+
+@font-face {
+    font-family: Note_this;
+    src: url(../fonts/Note_this.ttf);
+}
+
+@font-face {
+    font-family: JuneGloom;
+    src: url(../fonts/JuneGloom.ttf);
+}
+
+html, body {
+	width: 100%;
+	height: 100%;
+}
+
+h1 {
+	font-family: JuneGloom;
+	font-size: 60px;
+}
+
+#frame, .card {
+	width: 100%;
+	height: 100%;
+}
+
+#alertFrame {
+	position: fixed;
+	right: 16px;
+	bottom: 0px;
+	width: 300px;
+}

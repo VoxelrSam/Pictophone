@@ -6,21 +6,27 @@
 
 <link rel="stylesheet" href="include/animate.css"/>
 <link rel="stylesheet" href="include/bootstrap.css"/>
+<link rel="stylesheet" href="css/main.css">
 
 <script src="include/jquery.js"></script>
 <script src="include/bootstrap.js"></script>
-<script src="websocket.js"></script>
+<script src="scripts/websocket.js"></script>
+<script src="scripts/interface.js"></script>
 </head>
-<body>
-	<form>
+<body onLoad="getPage();">
+	<!--<form>
 		<input id="message" type="text">
         <input onclick="getPage();" value="Echo" type="button">
         <input onclick="closeConnection();" value="Disconnect" type="button">
     </form>
     <br/>
+	<button type="button" class="btn btn-primary" onClick="notify('primary', 'banana')">Primary</button>-->
     <div id="frame">
         
     </div>
+	
+	<div id="alertFrame">
+	</div>
 
 </body>
 
