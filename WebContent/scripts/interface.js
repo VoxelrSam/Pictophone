@@ -47,3 +47,65 @@ function notify(type, message){
 		});
 	}, 5000);
 }
+
+function newCard(card){
+	document.getElementById("frame").innerHTML += card;
+	
+	var cards = document.getElementsByClassName("card");
+	if (cards.length == 2)
+		transitionCards(cards);
+}
+
+function transitionCards(cards){
+	var animation = Math.floor(Math.random() * 8);
+	
+	if (animation <= 3){
+		$(cards[1]).css("z-index", "0");
+		$(cards[0]).css("z-index", "1");
+		
+		var name;
+		switch(animation){
+			case 0:
+				name = "rollOut";
+				break;
+			case 1:
+				name = "slideOutUp";
+				break;
+			case 2: 
+				name = "slideOutRight";
+				break;
+			case 3:
+				name = "flipOutX";
+		}
+		
+		// Transition out card one
+		$(cards[0]).animateCss(name, function(){
+			$(cards[0]).remove();
+			triggerAnimation();
+		});
+	} else {
+		$(cards[0]).css("z-index", "0");
+		$(cards[1]).css("z-index", "1");
+		
+		var name;
+		switch(animation){
+			case 4:
+				name = "rollIn";
+				break;
+			case 5:
+				name = "jackInTheBox";
+				break;
+			case 6: 
+				name = "slideInLeft";
+				break;
+			case 7:
+				name = "bounceInDown";
+		}
+		
+		// Transition out card one
+		$(cards[1]).animateCss(name, function(){
+			$(cards[0]).remove();
+			triggerAnimation();
+		});
+	}
+}

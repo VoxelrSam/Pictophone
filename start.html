@@ -1,0 +1,16 @@
+<div class="card" style="background:Seashell;">
+	<script>
+		function triggerAnimation(){
+			$("#middle").animateCss('bounceIn');
+		}
+	</script>
+
+	<div class="animated bounceIn" style="width:500px;margin:auto;text-align:center;">
+		<h1>Pictophone</h1>
+		
+		<div style="width:150px;margin:auto;">
+			<button type="button" class="btn btn-outline-primary btn-block" onClick="sendMessage({type: 'createRoom'})">Create Room</button>
+			<button type="button" class="btn btn-outline-primary btn-block" onClick="notify('primary', 'banana')">Join Room</button>
+		</div>
+	</div>
+</div>

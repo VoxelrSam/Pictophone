@@ -5,6 +5,7 @@ public class Game {
 	private ArrayList<User> users;
 	private User owner;
 	private int size;
+	private String name;
 	private String key;
 	
 	public Game(User owner, int size) {

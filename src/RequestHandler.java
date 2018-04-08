@@ -41,6 +41,12 @@ public class RequestHandler {
 		switch ((String) request.get("type")) {
 		case "getPage":
 			return getPage(request, user);
+		case "createRoom":
+			if (user.getStage() != "init")
+				return 1;
+			
+			user.setStage("createRoom");
+			return getPage(request, user);
 		default:
 			System.out.println("Unknown request type: " + request.get("type"));
 			return 1;
@@ -52,11 +58,15 @@ public class RequestHandler {
 	private static int getPage(JSONObject request, User user) {
 		JSONObject response = new JSONObject();
 		response.put("id", user.getId());
+		response.put("type", "newPage");
 		
 		switch (user.getStage()) {
 		case "init":
-			response.put("body", Utils.getFileContents("card.html"));
-			response.put("type", "newPage");
+			response.put("body", Utils.getFileContents("start.html"));
+			user.send(response);
+			break;
+		case "createRoom":
+			response.put("body", Utils.getFileContents("createRoom.html"));
 			user.send(response);
 			break;
 		default:

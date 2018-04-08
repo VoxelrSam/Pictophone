@@ -65,6 +65,10 @@ public class User {
 		return stage;
 	}
 	
+	public void setStage(String stage) {
+		this.stage = stage;
+	}
+	
 	public static void add(User u) {
 		users.put(u.getId(), u);
 	}
