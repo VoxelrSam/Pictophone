@@ -39,7 +39,9 @@ function onMessage(message){
 	console.log(json);
 	
 	if (json.type == "newPage"){
-		newCard(json.body);
+		newCard(json);
+	} else if (json.type == "roomNotFound"){
+		notify("warning", "Room not found with that key. Try another.");
 	}
 }
 

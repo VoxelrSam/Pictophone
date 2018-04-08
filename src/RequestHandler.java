@@ -40,11 +40,44 @@ public class RequestHandler {
 		switch ((String) request.get("type")) {
 		case "getPage":
 			return getPage(request, user);
-		case "createRoom":
+		case "createRoomForm":
 			if (user.getStage() != "init")
 				return 1;
 			
-			user.setStage("createRoom");
+			user.setStage("createRoomForm");
+			return getPage(request, user);
+		case "createRoom":
+			if (user.getStage() != "createRoomForm")
+				return 1;
+			
+			User.getUsers().get(request.get("id")).setName((String) request.get("username"));
+			new Game(User.getUsers().get(request.get("id")), (String) request.get("roomname"), Integer.parseInt((String) request.get("roomsize")));
+			
+			user.setStage("ownerWait");
+			return getPage(request, user);
+		case "joinRoomForm":
+			if (user.getStage() != "init")
+				return 1;
+			
+			user.setStage("joinRoom");
+			return getPage(request, user);
+		case "joinRoom":
+			if (user.getStage() != "joinRoom")
+				return 1;
+			
+			Game g = Game.getGame((String) request.get("roomkey"));
+			if (g == null) {
+				// Game does not exist
+				JSONObject response = new JSONObject();
+				response.put("type", "roomNotFound");
+				user.send(response);
+				return 1;
+			}
+			
+			g.addUser(user);
+			user.setName((String) request.get("username"));
+			user.setStage("waiting");
+			
 			return getPage(request, user);
 		default:
 			System.out.println("Unknown request type: " + request.get("type"));
@@ -61,21 +94,33 @@ public class RequestHandler {
 	 */
 	private static int getPage(JSONObject request, User user) {
 		JSONObject response = new JSONObject();
-		response.put("id", user.getId());
 		response.put("type", "newPage");
 		
+		String fileName;
 		switch (user.getStage()) {
 		case "init":
-			response.put("body", Utils.getFileContents("start.html"));
-			user.send(response);
+			fileName = "start.html";
 			break;
-		case "createRoom":
-			response.put("body", Utils.getFileContents("createRoom.html"));
-			user.send(response);
+		case "createRoomForm":
+			fileName = "createRoom.html";
+			break;
+		case "ownerWait":
+			fileName = "ownerWait.html";
+			response.put("key", user.getGame().getKey());
+			break;
+		case "joinRoom":
+			fileName = "joinRoom.html";
+			break;
+		case "waiting":
+			fileName = "waiting.html";
 			break;
 		default:
 			System.out.println("Requested page for stage " + user.getStage() + " but no page was specified for the stage...");
+			fileName = "start.html";
 		}
+		
+		response.put("body", Utils.getFileContents(fileName));
+		user.send(response);
 		
 		return 0;
 	}

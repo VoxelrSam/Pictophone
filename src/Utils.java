@@ -6,14 +6,14 @@ import java.nio.file.Paths;
 public class Utils {
 	
 	/**
-	 * Generate a key of 10 random numbers to use for authentication
+	 * Generate a key of 5 random numbers to use for authentication
 	 * 
 	 * @return the key generated
 	 */
 	public static String generateKey() {
 		String key = "";
 		
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			key += (int) (Math.random() * 10);
 		}
 		
@@ -27,7 +27,7 @@ public class Utils {
 	 * @return 0 if successful, 1 if not
 	 */
 	public static String getFileContents(String fileName) {
-		System.out.println(System.getProperty("user.dir"));
+		//System.out.println(System.getProperty("user.dir"));
 		
 		try {
 			byte[] data = Files.readAllBytes(Paths.get("C:\\Users\\Sam\\Documents\\GitHub\\Pictophone\\" + fileName));

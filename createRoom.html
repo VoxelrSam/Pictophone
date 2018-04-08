@@ -3,8 +3,20 @@
 		<h1>Create Room</h1>
 		
 		<div style="width:150px;margin:auto;">
-			<button type="button" class="btn btn-outline-primary btn-block" onClick="notify('primary', 'banana')">Create Room</button>
-			<button type="button" class="btn btn-outline-primary btn-block" onClick="notify('primary', 'banana')">Join Room</button>
+			<input id="username" class="form-control btn-block scribbleInput" type="text" placeholder="Your Name">
+			<input id="roomname" class="form-control btn-block scribbleInput" type="text" placeholder="Room Name">
+			<select id="roomsize" class="form-control btn-block">
+				<option>Room Size</option>
+				<option>3</option>
+				<option>4</option>
+				<option>5</option>
+				<option>6</option>
+				<option>7</option>
+				<option>8</option>
+				<option>9</option>
+				<option>10</option>
+			</select>
+			<button type="button" class="btn btn-outline-warning btn-block" onClick="createRoom();">Create</button>
 		</div>
 	</div>
 </div>

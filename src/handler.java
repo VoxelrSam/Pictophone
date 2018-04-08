@@ -15,11 +15,12 @@ public class handler {
 	 @OnClose
 	 public void onClose() {
 		 System.out.println("Connection Ended");
+		 // TODO: Delete temp users and add delete timer for logged users
 	 }
 	 
 	 @OnMessage
 	 public void onMessage(String message, Session session) {
-		 System.out.println(message);
+		 System.out.println("\n--------------------\n" + message);
 		 RequestHandler.handleRequest(message, session);
 	 }
 	 

@@ -34,6 +34,11 @@ public class User {
 	 * @return 0 if success, 1 if something went wrong.
 	 */
 	public int send(JSONObject message) {
+		message.put("id", this.getId());
+		message.put("name", this.getName());
+		if (this.getGame() != null)
+			message.put("roomName", this.getGame().getName());
+		
 		try {
 			session.getAsyncRemote().sendText(message.toString());
 		} catch (Exception e) {
@@ -49,6 +54,10 @@ public class User {
 		return name;
 	}
 	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public String getId() {
 		return id;
 	}
@@ -59,6 +68,10 @@ public class User {
 	
 	public Game getGame() {
 		return currentGame;
+	}
+	
+	public void setGame(Game g) {
+		this.currentGame = g;
 	}
 	
 	public String getStage() {

@@ -48,12 +48,22 @@ function notify(type, message){
 	}, 5000);
 }
 
-function newCard(card){
-	document.getElementById("frame").innerHTML += card;
+function newCard(json){
+	document.getElementById("frame").innerHTML += json.body;
+	
+	populatePage(json);
 	
 	var cards = document.getElementsByClassName("card");
 	if (cards.length == 2)
 		transitionCards(cards);
+}
+
+function populatePage(json){
+	if (json.key != null && document.getElementById("key") != null)
+		document.getElementById("key").innerHTML = json.key;
+	
+	if (json.roomName != null && document.getElementById("roomName") != null)
+		document.getElementById("roomName").innerHTML = json.roomName;
 }
 
 function transitionCards(cards){
@@ -81,7 +91,6 @@ function transitionCards(cards){
 		// Transition out card one
 		$(cards[0]).animateCss(name, function(){
 			$(cards[0]).remove();
-			triggerAnimation();
 		});
 	} else {
 		$(cards[0]).css("z-index", "0");
@@ -105,7 +114,25 @@ function transitionCards(cards){
 		// Transition out card one
 		$(cards[1]).animateCss(name, function(){
 			$(cards[0]).remove();
-			triggerAnimation();
 		});
 	}
+}
+
+function createRoom(){
+	var message = {};
+	message.type = "createRoom";
+	message.username = document.getElementById("username").value;
+	message.roomname = document.getElementById("roomname").value;
+	message.roomsize = document.getElementById("roomsize").value;
+	
+	sendMessage(message);
+}
+
+function joinRoom(){
+	var message = {};
+	message.type = "joinRoom";
+	message.username = document.getElementById("username").value;
+	message.roomkey = document.getElementById("roomkey").value;
+	
+	sendMessage(message);
 }
