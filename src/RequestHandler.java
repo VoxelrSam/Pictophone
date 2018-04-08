@@ -4,8 +4,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+/**
+ * Class used to handle all of the request logic
+ * Designed to be used statically; no RequestHandler objects are created
+ * 
+ * @author Samuel Ingram
+ */
 public class RequestHandler {
-
+	
 	/**
 	 * Takes in a message from the client and handles the request
 	 * 
@@ -74,7 +80,14 @@ public class RequestHandler {
 				return 1;
 			}
 			
-			g.addUser(user);
+			if (g.addUser(user) != 0) {
+				// Could not add user
+				JSONObject response = new JSONObject();
+				response.put("type", "roomNotOpen");
+				user.send(response);
+				return 1;
+			}
+			
 			user.setName((String) request.get("username"));
 			user.setStage("waiting");
 			

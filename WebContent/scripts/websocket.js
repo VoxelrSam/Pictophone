@@ -15,7 +15,8 @@ function sendMessage(message){
 	message.name = sessionStorage["name"];
 	
 	webSocket.send(JSON.stringify(message));
-	console.log("Message sent to server : " + JSON.stringify(message) + "\n");
+	console.log("Message sent to server:");
+	console.log(message);
 }
 
 function closeConnection(){
@@ -23,8 +24,6 @@ function closeConnection(){
 }
 
 function onMessage(message){
-	console.log("Message received: " + message.data);
-	
 	var json = JSON.parse(message.data);
 	
 	if (json.id != null){
@@ -42,11 +41,14 @@ function onMessage(message){
 		newCard(json);
 	} else if (json.type == "roomNotFound"){
 		notify("warning", "Room not found with that key. Try another.");
+	} else if (json.type == "roomNotOpen"){
+		notify("warning", "This room is not accepting users at the moment. Try another.");
 	}
 }
 
 function onClose(message){
 	console.log("Disconnected ... \n");
+	notify("Danger", "Connection lost. The Server may have went down...");
 }
 
 function onError(message){

@@ -4,10 +4,16 @@ import javax.websocket.Session;
 
 import org.json.simple.JSONObject;
 
+/**
+ * Class used to represent users on the server
+ * In the code, Users are most often distinguished by their id
+ * 
+ * @author Sam
+ */
 public class User {
 	
 	/**
-	 * HashMap of User id's to User object to keep track of all clients
+	 * HashMap of User id's to User objects to keep track of all clients
 	 */
 	private static HashMap<String, User> users = new HashMap<String, User>();
 	

@@ -123,7 +123,24 @@ function createRoom(){
 	message.type = "createRoom";
 	message.username = document.getElementById("username").value;
 	message.roomname = document.getElementById("roomname").value;
-	message.roomsize = document.getElementById("roomsize").value;
+	
+	if (message.username.length == 0){
+		notify("warning", "Please specify a username");
+		return;
+	}
+	
+	if (message.roomname.length == 0){
+		notify("warning", "Please specify a roomname");
+		return;
+	}
+	
+	var roomsize = document.getElementById("roomsize").value;
+	if (isNaN(roomsize) || roomsize > 10 || roomsize < 3){
+		notify("warning", "Please select a valid roomsize");
+		return;
+	}
+		
+	message.roomsize = roomsize;
 	
 	sendMessage(message);
 }
@@ -133,6 +150,16 @@ function joinRoom(){
 	message.type = "joinRoom";
 	message.username = document.getElementById("username").value;
 	message.roomkey = document.getElementById("roomkey").value;
+	
+	if (message.username.length == 0){
+		notify("warning", "Please specify a username");
+		return;
+	}
+	
+	if (isNaN(message.roomkey) || message.roomkey.toString().length != 5){
+		notify("warning", "Please specify a valid room key. Room keys consist of 5 numbers.");
+		return;
+	}
 	
 	sendMessage(message);
 }

@@ -5,6 +5,11 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 
+/**
+ * Class used to handle WebSocket connections
+ * 
+ * @author Samuel Ingram
+ */
 @ServerEndpoint("/socketHandler")
 public class handler {
 	 @OnOpen

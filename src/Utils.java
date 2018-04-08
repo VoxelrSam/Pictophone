@@ -3,6 +3,11 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * A class that contains useful functions that didn't really fit in any one place
+ * 
+ * @author Samuel Ingram
+ */
 public class Utils {
 	
 	/**
