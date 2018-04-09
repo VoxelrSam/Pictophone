@@ -18,6 +18,11 @@ public class Game {
 	 */
 	private static HashMap<String, Game> games = new HashMap<>();
 	
+	/**
+	 * An ArrayList that holds the different pieces of data sent from the clients
+	 * corresponding to each step in the game.
+	 * i.e. holds both prompt strings and drawing data
+	 */
 	private ArrayList<String> timeline;
 	
 	private ArrayList<User> users;
@@ -70,6 +75,9 @@ public class Game {
 		pushPages();
 	}
 	
+	/**
+	 * Ends the game. Normally called by the next() function
+	 */
 	private void end() {
 		for (int i = 0; i < users.size(); i++) {
 			users.get(i).setStage("end");
@@ -79,6 +87,10 @@ public class Game {
 		pushPages();
 	}
 	
+	/**
+	 * Advances the game to the next stage
+	 * i.e. prompts the next user
+	 */
 	private void next() {
 		if (promptCounter + 1 == size) {
 			end();
@@ -98,6 +110,13 @@ public class Game {
 		pushPages();
 	}
 	
+	/**
+	 * Handles game specific requests
+	 * 
+	 * @param request The request to be handled
+	 * @param user The user to whom the request belongs
+	 * @return 0 if success, 1 if otherwise
+	 */
 	public int handle(JSONObject request, User user) {
 		switch ((String) request.get("type")) {
 		case "submitPrompt":
@@ -117,6 +136,9 @@ public class Game {
 		return 0;
 	}
 	
+	/**
+	 * Pushes updated pages to the users who are in a new stage
+	 */
 	private void pushPages() {
 		for (User user : users) {
 			if (user.pageUpdated()) {

@@ -54,8 +54,12 @@ function newCard(json){
 	populatePage(json);
 	
 	var cards = document.getElementsByClassName("card");
-	if (cards.length == 2)
+	if (cards.length == 2){
+		theme(cards[1]);
 		transitionCards(cards);
+	} else {
+		theme(cards[0]);
+	}
 }
 
 function populatePage(json){
@@ -70,6 +74,33 @@ function populatePage(json){
 	
 	if (json.timeline != null && document.getElementById("timeline") != null)
 		document.getElementById("timeline").innerHTML = json.timeline;
+}
+
+function theme(card){
+	var css;
+	var themeNumber = Math.floor(Math.random() * 5);
+	
+	switch (themeNumber){
+		case 0:
+			css = {background:"Seashell",color:"black"};
+			break;
+		case 1:
+			css = {background:"palegreen",color:"black"};
+			break;
+		case 2: 
+			css = {background:"lightblue",color:"white"};
+			break;
+		case 3: 
+			css = {background:"lemonchiffon",color:"black"};
+			break;
+		case 4:
+			css = {background:"wheat",color:"black"};
+			break;
+		default:
+			console.log("Theme Error " + themeNumber);
+	}
+	
+	$(card).css(css);
 }
 
 function transitionCards(cards){

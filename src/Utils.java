@@ -13,7 +13,7 @@ import org.json.simple.JSONObject;
 public class Utils {
 	
 	/**
-	 * Sends a "card" to the client
+	 * Sends a "card" to the client based on their current stage
 	 * 
 	 * @param user The user requesting the page
 	 * @return 0 if successful, 1 if not
