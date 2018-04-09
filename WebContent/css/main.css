@@ -29,6 +29,11 @@ h1 {
 	font-size: 60px;
 }
 
+h2 {
+	font-family: JuneGloom;
+	font-size: 50px;
+}
+
 /* Id's */
 
 #frame, .card {

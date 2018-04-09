@@ -13,6 +13,7 @@ function onOpen(message){
 function sendMessage(message){
 	message.id = sessionStorage["id"];
 	message.name = sessionStorage["name"];
+	message.gameKey = sessionStorage["gameKey"];
 	
 	webSocket.send(JSON.stringify(message));
 	console.log("Message sent to server:");
@@ -34,6 +35,10 @@ function onMessage(message){
 		sessionStorage["name"] = json.name;
 	}
 	
+	if (json.gameKey != null){
+		sessionStorage["gameKey"] = json.gameKey;
+	}
+	
 	console.log("Message received from server :");
 	console.log(json);
 	
@@ -48,7 +53,7 @@ function onMessage(message){
 
 function onClose(message){
 	console.log("Disconnected ... \n");
-	notify("Danger", "Connection lost. The Server may have went down...");
+	notify("danger", "Connection lost. The Server may have went down...");
 }
 
 function onError(message){

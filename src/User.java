@@ -22,11 +22,13 @@ public class User {
 	private Session session;
 	private Game currentGame;
 	private String stage;
+	private boolean pageUpdated;
 	
 	public User(Session session) {
 		this.id = Utils.generateKey();
 		this.session = session;
 		this.stage = "init";
+		this.pageUpdated = false;
 		
 		User.add(this);
 		
@@ -42,8 +44,10 @@ public class User {
 	public int send(JSONObject message) {
 		message.put("id", this.getId());
 		message.put("name", this.getName());
-		if (this.getGame() != null)
+		if (this.getGame() != null) {
 			message.put("roomName", this.getGame().getName());
+			message.put("gameKey", this.getGame().getKey());
+		}
 		
 		try {
 			session.getAsyncRemote().sendText(message.toString());
@@ -86,6 +90,14 @@ public class User {
 	
 	public void setStage(String stage) {
 		this.stage = stage;
+	}
+	
+	public void setPageUpdated(boolean b) {
+		this.pageUpdated = b;
+	}
+	
+	public boolean pageUpdated() {
+		return pageUpdated;
 	}
 	
 	public static void add(User u) {

@@ -64,6 +64,12 @@ function populatePage(json){
 	
 	if (json.roomName != null && document.getElementById("roomName") != null)
 		document.getElementById("roomName").innerHTML = json.roomName;
+	
+	if (json.prompt != null && document.getElementById("prompt") != null)
+		document.getElementById("prompt").innerHTML = json.prompt;
+	
+	if (json.timeline != null && document.getElementById("timeline") != null)
+		document.getElementById("timeline").innerHTML = json.timeline;
 }
 
 function transitionCards(cards){
@@ -130,13 +136,13 @@ function createRoom(){
 	}
 	
 	if (message.roomname.length == 0){
-		notify("warning", "Please specify a roomname");
+		notify("warning", "Please specify a room name");
 		return;
 	}
 	
 	var roomsize = document.getElementById("roomsize").value;
 	if (isNaN(roomsize) || roomsize > 10 || roomsize < 3){
-		notify("warning", "Please select a valid roomsize");
+		notify("warning", "Please select a valid room size");
 		return;
 	}
 		
@@ -160,6 +166,21 @@ function joinRoom(){
 		notify("warning", "Please specify a valid room key. Room keys consist of 5 numbers.");
 		return;
 	}
+	
+	sendMessage(message);
+}
+
+function submitPrompt(){
+	var message = {};
+	message.type = "submitPrompt";
+	message.prompt = document.getElementById("promptInput").value;
+	
+	sendMessage(message);
+}
+
+function submitDrawing(){
+	var message = {};
+	message.type = "submitDrawing";
 	
 	sendMessage(message);
 }
