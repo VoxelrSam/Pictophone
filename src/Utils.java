@@ -93,7 +93,7 @@ public class Utils {
 		//System.out.println(System.getProperty("user.dir"));
 		
 		try {
-			byte[] data = Files.readAllBytes(Paths.get("C:\\Users\\Sam\\Documents\\GitHub\\Pictophone\\" + fileName));
+			byte[] data = Files.readAllBytes(Paths.get("F:\\GitHub\\Pictophone\\" + fileName));
 			return new String(data, Charset.defaultCharset());
 		} catch (IOException e) {
 			System.out.println("File not found: " + fileName);

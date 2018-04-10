@@ -97,6 +97,11 @@ public class RequestHandler {
 			}
 			
 			user.setName((String) request.get("username"));
+			
+			// Avoid double page send
+			if (g.getStage().equals("playing"))
+				return 0;
+			
 			user.setStage("waiting");
 			
 			break;

@@ -1,4 +1,12 @@
-// Extend JQuery for Animate.css use
+/**
+ * Used for all the general functions that make the page dynamic and interactive
+ */
+
+/** 
+ * Extend JQuery for Animate.css use
+ * Taken from the Animate.css GitHub
+ * https://github.com/daneden/animate.css/blob/master/README.md
+ */
 $.fn.extend({
   animateCss: function(animationName, callback) {
     var animationEnd = (function(el) {
@@ -6,7 +14,7 @@ $.fn.extend({
         animation: 'animationend',
         OAnimation: 'oAnimationEnd',
         MozAnimation: 'mozAnimationEnd',
-        WebkitAnimation: 'webkitAnimationEnd',
+        WebkitAnimation: 'webkitAnimationEnd'
       };
 
       for (var t in animations) {
@@ -15,22 +23,31 @@ $.fn.extend({
         }
       }
     })(document.createElement('div'));
-
-    this.addClass('animated ' + animationName).one(animationEnd, function() {
+	
+    $(this).addClass('animated ' + animationName).one(animationEnd, function() {
       $(this).removeClass('animated ' + animationName);
 
       if (typeof callback === 'function') callback();
+	  else console.log("no");
     });
 
     return this;
   },
 });
 
+// Used to keep track of individual notifications
 var notificationCounter = 0;
 
+/**
+ * Displays a little notification in the corner
+ *
+ * @param type The type of Bootstrap alert to be displayed
+ * @param mesage The message to be displayed
+ */
 function notify(type, message){
 	var id = "notification-" + notificationCounter++;
 	
+	// Insert the notification
 	document.getElementById("alertFrame").innerHTML +=
 		"<div class=\"alert alert-" + type + "\" role=alert id=\"" + id + "\">" +
 			message + 
@@ -41,6 +58,7 @@ function notify(type, message){
 		
 		$("#" + id).animateCss('zoomInUp');
 		
+	// Delete the notification after a while
 	window.setTimeout(function(){
 		$("#" + id).animateCss('zoomOut', function(){
 			$("#" + id).remove();
@@ -48,11 +66,18 @@ function notify(type, message){
 	}, 5000);
 }
 
+/**
+ * Handles a new card being sent in by the server
+ * Fills in the proper info, themes it, and then animates it in
+ */
 function newCard(json){
+	// Insert Card
 	document.getElementById("frame").innerHTML += json.body;
 	
+	// Fill in the information
 	populatePage(json);
 	
+	// Theme and animate if we need to swap cards
 	var cards = document.getElementsByClassName("card");
 	if (cards.length == 2){
 		theme(cards[1]);
@@ -62,6 +87,9 @@ function newCard(json){
 	}
 }
 
+/**
+ * Fills in the info on the page given by the server
+ */
 function populatePage(json){
 	if (json.key != null && document.getElementById("key") != null)
 		document.getElementById("key").innerHTML = json.key;
@@ -76,6 +104,9 @@ function populatePage(json){
 		document.getElementById("timeline").innerHTML = json.timeline;
 }
 
+/**
+ * Gives a psuedo-random theme to each card passed in
+ */
 function theme(card){
 	var css;
 	var themeNumber = Math.floor(Math.random() * 5);
@@ -88,7 +119,7 @@ function theme(card){
 			css = {background:"palegreen",color:"black"};
 			break;
 		case 2: 
-			css = {background:"lightblue",color:"white"};
+			css = {background:"lightblue",color:"black"};
 			break;
 		case 3: 
 			css = {background:"lemonchiffon",color:"black"};
@@ -103,9 +134,15 @@ function theme(card){
 	$(card).css(css);
 }
 
+/**
+ * Transitions two cards
+ * The old one is deleted at the end
+ */
 function transitionCards(cards){
+	// Pick a random animation
 	var animation = Math.floor(Math.random() * 8);
 	
+	// If animating the old card
 	if (animation <= 3){
 		$(cards[1]).css("z-index", "0");
 		$(cards[0]).css("z-index", "1");
@@ -130,6 +167,8 @@ function transitionCards(cards){
 			$(cards[0]).remove();
 		});
 	} else {
+		// animating the new card
+		
 		$(cards[0]).css("z-index", "0");
 		$(cards[1]).css("z-index", "1");
 		
@@ -155,6 +194,9 @@ function transitionCards(cards){
 	}
 }
 
+/**
+ * Validate and send form for creating a room
+ */
 function createRoom(){
 	var message = {};
 	message.type = "createRoom";
@@ -182,6 +224,9 @@ function createRoom(){
 	sendMessage(message);
 }
 
+/**
+ * Validate and send form for joining a room
+ */
 function joinRoom(){
 	var message = {};
 	message.type = "joinRoom";
@@ -201,6 +246,9 @@ function joinRoom(){
 	sendMessage(message);
 }
 
+/**
+ * Validate and send form for submiting a prompt
+ */
 function submitPrompt(){
 	var message = {};
 	message.type = "submitPrompt";
@@ -209,6 +257,9 @@ function submitPrompt(){
 	sendMessage(message);
 }
 
+/**
+ * Send newly created drawing
+ */
 function submitDrawing(){
 	var message = {};
 	message.type = "submitDrawing";

@@ -32,6 +32,7 @@ h1 {
 h2 {
 	font-family: JuneGloom;
 	font-size: 50px;
+	color: darkgrey;
 }
 
 /* Id's */
@@ -59,24 +60,24 @@ h2 {
 }
 
 .scribbleInput {
-	color: white;
+	color: black;
 	border: none;
 	background: none;
-	border-bottom: 1px solid white;
+	border-bottom: 1px solid darkgrey;
 	border-radius: 0px;
 }
 
 .scribbleInput:focus {
-	color: white;
+	color: black;
 	border: none;
 	background: none;
-	border-bottom: 1px solid grey;
+	border-bottom: 1px solid darkgrey;
 }
 
-.form-control::-webkit-input-placeholder { color: lightgrey; }  /* WebKit, Blink, Edge */
-.form-control:-moz-placeholder { color: lightgrey; }  /* Mozilla Firefox 4 to 18 */
-.form-control::-moz-placeholder { color: lightgrey; }  /* Mozilla Firefox 19+ */
-.form-control:-ms-input-placeholder { color: lightgrey; }  /* Internet Explorer 10-11 */
+/*.form-control::-webkit-input-placeholder { color: lightgrey; }  /* WebKit, Blink, Edge 
+.form-control:-moz-placeholder { color: lightgrey; }  /* Mozilla Firefox 4 to 18 
+.form-control::-moz-placeholder { color: lightgrey; }  /* Mozilla Firefox 19+ 
+.form-control:-ms-input-placeholder { color: lightgrey; }  /* Internet Explorer 10-11 
 .form-control::-ms-input-placeholder { color: lightgrey; }  /* Microsoft Edge */
 
 .jackInTheBox {

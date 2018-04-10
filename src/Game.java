@@ -57,6 +57,7 @@ public class Game {
 	 */
 	public void start() {
 		this.stage = "playing";
+		System.out.println("Game " + this.getKey() + " started!");
 		
 		// Randomize Order
 		Collections.shuffle(users);
@@ -119,6 +120,9 @@ public class Game {
 	 */
 	public int handle(JSONObject request, User user) {
 		switch ((String) request.get("type")) {
+		case "getPage":
+			
+			return Utils.getPage(user);
 		case "submitPrompt":
 			timeline.add((String) request.get("prompt"));
 			
@@ -195,6 +199,10 @@ public class Game {
 	
 	public String getKey() {
 		return key;
+	}
+	
+	public String getStage() {
+		return stage;
 	}
 	
 	public String getLastSubmission() {

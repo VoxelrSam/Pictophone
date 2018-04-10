@@ -50,7 +50,7 @@ public class User {
 		}
 		
 		try {
-			session.getAsyncRemote().sendText(message.toString());
+			session.getBasicRemote().sendText(message.toString());
 		} catch (Exception e) {
 			User.remove(this.getId());
 			e.printStackTrace();
