@@ -74,6 +74,10 @@ function newCard(json){
 	// Insert Card
 	document.getElementById("frame").innerHTML += json.body;
 	
+	// Init drawer if the canvas is present
+	if (document.getElementById("canvas") != null)
+		initDrawer();
+	
 	// Fill in the information
 	populatePage(json);
 	
@@ -98,7 +102,7 @@ function populatePage(json){
 		document.getElementById("roomName").innerHTML = json.roomName;
 	
 	if (json.prompt != null && document.getElementById("prompt") != null)
-		document.getElementById("prompt").innerHTML = json.prompt;
+		document.getElementById("prompt").innerHTML = "\"" + json.prompt + "\"";
 	
 	if (json.timeline != null && document.getElementById("timeline") != null)
 		document.getElementById("timeline").innerHTML = json.timeline;
@@ -132,6 +136,40 @@ function theme(card){
 	}
 	
 	$(card).css(css);
+	
+	var inverse = inverseColor($(card).css("background-color"));
+	
+	$(card).find(".btn").css({
+		"color": inverse,
+		"border-color": inverse
+	});
+	
+	$(card).find(".btn").hover(function(){
+		$(this).css({
+			"color": "white",
+			"background-color": inverse
+		});
+	}, function(){
+		$(this).css({
+			"color": inverse,
+			"background-color": "transparent"
+		});
+	});
+}
+
+function inverseColor(color){
+	var r = (255 - color.slice(4, 7)).toString(16);
+	var g = (255 - color.slice(9, 12)).toString(16);
+	var b = (255 - color.slice(14, 17)).toString(16);
+	
+	if (r.length == 1)
+		r = '0' + r;
+	if (g.length == 1)
+		g = '0' + g;
+	if (b.length == 1)
+		b = '0' + b;
+	
+	return '#' + r + g + b;
 }
 
 /**
