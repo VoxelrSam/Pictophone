@@ -1,4 +1,5 @@
 import javax.websocket.server.ServerEndpoint;
+import javax.websocket.CloseReason;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
@@ -12,25 +13,25 @@ import javax.websocket.Session;
  */
 @ServerEndpoint("/socketHandler")
 public class handler {
-	 @OnOpen
-	 public void onOpen() {
-		 System.out.println("Connection Found!");
-	 }
+	@OnOpen
+	public void onOpen() {
+		System.out.println("Connection Found!");
+	}
 	 
-	 @OnClose
-	 public void onClose() {
-		 System.out.println("Connection Ended");
-		 // TODO: Delete temp users and add delete timer for logged users
-	 }
+	@OnClose
+	public void onClose(CloseReason c) {
+		System.out.println("Connection Ended: " + c.getReasonPhrase());
+		// TODO: Delete temp users and add delete timer for logged users
+	}
 	 
-	 @OnMessage
-	 public void onMessage(String message, Session session) {
-		 System.out.println("\n--------------------\n" + message);
-		 RequestHandler.handleRequest(message, session);
-	 }
+	@OnMessage
+	public void onMessage(String message, Session session) {
+		System.out.println("\n--------------------\n" + message);
+		RequestHandler.handleRequest(message, session);
+	}
 	 
-	 @OnError
-	 public void onError(Throwable e) {
-		 e.printStackTrace();
-	 }
+	@OnError
+	public void onError(Throwable e) {
+		e.printStackTrace();
+	}
 }

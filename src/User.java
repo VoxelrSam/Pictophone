@@ -60,6 +60,11 @@ public class User {
 		return 0;
 	}
 	
+	public void leaveGame() {
+		this.getGame().removeUser(this);
+		this.setStage("init");
+	}
+	
 	public String getName() {
 		return name;
 	}

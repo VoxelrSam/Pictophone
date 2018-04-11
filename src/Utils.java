@@ -45,6 +45,7 @@ public class Utils {
 			break;
 		case "describing":
 			fileName = "describe.html";
+			response.put("image", user.getGame().getLastSubmission());
 			break;
 		case "drawing":
 			fileName = "draw.html";
@@ -55,7 +56,8 @@ public class Utils {
 			break;
 		case "end":
 			fileName = "end.html";
-			response.put("timeline", user.getGame().getTimeline().toString());
+			response.put("timeline", user.getGame().getTimelineString());
+			response.put("users", user.getGame().getUsersString());
 			break;
 		default:
 			System.out.println("Requested page for stage " + user.getStage() + " but no page was specified for the stage...");

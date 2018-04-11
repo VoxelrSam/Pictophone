@@ -18,10 +18,15 @@ function initDrawer(){
 	
 	$("#marker").click(function(){
 		setEraser(false);
+		$(this).css({"background": "lightgrey"});
+		$("#eraser").css({"background": "white"});
 	});
+	$("#marker").css({"background": "lightgrey"});
 	
 	$("#eraser").click(function(){
 		setEraser(true);
+		$(this).css({"background": "lightgrey"});
+		$("#marker").css({"background": "white"});
 	});
 	
 	$("#clear").click(function(){

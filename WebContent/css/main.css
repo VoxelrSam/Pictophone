@@ -15,6 +15,11 @@
     src: url(../fonts/JuneGloom.ttf);
 }
 
+@font-face {
+    font-family: VanillaExtract;
+    src: url(../fonts/VanillaExtract.ttf);
+}
+
 /* Tags */
 
 html, body {
@@ -25,14 +30,16 @@ html, body {
 }
 
 h1 {
-	font-family: JuneGloom;
-	font-size: 60px;
+	font-family: VanillaExtract;
+	font-size: 80px;
+	-webkit-text-stroke: 1px black;
 }
 
 h2 {
-	font-family: JuneGloom;
+	font-family: VanillaExtract;
 	font-size: 50px;
 	color: darkgrey;
+	-webkit-text-stroke: 1px black;
 }
 
 /* Id's */
@@ -47,6 +54,7 @@ h2 {
 	right: 16px;
 	bottom: 0px;
 	width: 300px;
+	z-index: 100;
 }
 
 #canvas{
@@ -58,7 +66,7 @@ h2 {
 }
 
 #toolbar{
-	background: gainsboro;
+	background: white;
 	border: 5px solid grey;
 	padding: 0px;
 }
@@ -91,6 +99,21 @@ h2 {
 	margin: 0px;
 }
 
+#timeline{
+	background: url(../media/funky-lines.png);
+	margin: 25px;
+	padding: 25px;
+	border: 5px dashed lightgrey;
+}
+
+#back{
+	font-size:70px;
+	position:absolute;
+	top:20px;
+	left:20px;
+	cursor: pointer;
+}
+
 /* Classes */
 
 .card {
@@ -102,6 +125,12 @@ h2 {
 	overflow: auto;
 	padding-top: 20px;
 	padding-bottom: 20px;
+}
+
+.identifier{
+	position: fixed;
+	top: 30px;
+	right: 30px;
 }
 
 .scribbleInput {
@@ -117,6 +146,24 @@ h2 {
 	border: none;
 	background: none;
 	border-bottom: 1px solid darkgrey;
+}
+
+.drawing{
+	background: white;
+	width: 1000px;
+	margin: auto;
+	border: 5px solid grey;
+	border-radius: 20px;
+	box-shadow: 5px 5px 10px rgba(50, 50, 50, .3);
+}
+
+.line{
+	width: 0px;
+	height: 150px;
+	margin: auto;
+	margin-top: 25px;
+	margin-bottom: 25px;
+	border: 2px solid lightgrey;
 }
 
 .jackInTheBox {

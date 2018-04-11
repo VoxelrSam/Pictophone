@@ -46,6 +46,7 @@ function sendMessage(message){
  */
 function closeConnection(){
 	webSocket.close();
+	console.log("We closed it");
 }
 
 /**
@@ -56,15 +57,9 @@ function onMessage(message){
 	var json = JSON.parse(message.data);
 	
 	// Store User data in sessionStorage
-	if (json.id != null){
-		sessionStorage["id"] = json.id;
-	}
-	if (json.name != null){
-		sessionStorage["name"] = json.name;
-	}
-	if (json.gameKey != null){
-		sessionStorage["gameKey"] = json.gameKey;
-	}
+	sessionStorage["id"] = json.id;
+	sessionStorage["name"] = json.name;
+	sessionStorage["gameKey"] = json.gameKey;
 	
 	console.log("Message received from server :");
 	console.log(json);
@@ -83,7 +78,7 @@ function onMessage(message){
  * When the connection is closed
  */
 function onClose(message){
-	console.log("Disconnected ... \n");
+	console.log(message);
 	notify("danger", "Connection lost. The Server may have went down...");
 }
 

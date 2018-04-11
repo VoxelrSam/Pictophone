@@ -28,7 +28,6 @@ $.fn.extend({
       $(this).removeClass('animated ' + animationName);
 
       if (typeof callback === 'function') callback();
-	  else console.log("no");
     });
 
     return this;
@@ -105,7 +104,37 @@ function populatePage(json){
 		document.getElementById("prompt").innerHTML = "\"" + json.prompt + "\"";
 	
 	if (json.timeline != null && document.getElementById("timeline") != null)
-		document.getElementById("timeline").innerHTML = json.timeline;
+		buildTimeline(JSON.parse(json.timeline), JSON.parse(json.users));
+		
+	if (json.image != null && document.getElementsByClassName("drawing") != null)
+		document.getElementsByClassName("drawing")[0].src = json.image;
+		
+	if (sessionStorage["name"] !== "null" && document.getElementsByClassName("identifier") != null){
+		var ids = document.getElementsByClassName("identifier");
+		
+		ids[ids.length - 1].innerHTML = sessionStorage["name"];
+	}
+}
+
+function buildTimeline(timeline, users){
+	var div = document.getElementById("timeline");
+
+	for (var i = 0; i < timeline.length; i++){
+		if (i % 2 == 0){
+			div.innerHTML +=
+				"<h2>" + users[i] + " said</h2>" +
+				"<h3>\"" + timeline[i] + "\"</h3>" 
+				"<br/>";
+		} else {
+			div.innerHTML +=
+				"<h2>" + users[i] + " drew</h2>" +
+				"<img class=\"drawing\" src=\"" + timeline[i] + "\"/>" +
+				"<br/>";
+		}
+		
+		if (i != timeline.length - 1)
+			div.innerHTML += "<div class=\"line\"></div>"
+	}
 }
 
 /**
@@ -113,35 +142,43 @@ function populatePage(json){
  */
 function theme(card){
 	var css;
+	var complement;
 	var themeNumber = Math.floor(Math.random() * 5);
 	
 	switch (themeNumber){
 		case 0:
 			css = {background:"Seashell",color:"black"};
+			complement = "#edf8ff";
 			break;
 		case 1:
 			css = {background:"palegreen",color:"black"};
+			complement = "#fa98fa";
 			break;
 		case 2: 
 			css = {background:"lightblue",color:"black"};
+			complement = "#e6baac";
 			break;
 		case 3: 
 			css = {background:"lemonchiffon",color:"black"};
+			complement = "#ccd1ff";
 			break;
 		case 4:
 			css = {background:"wheat",color:"black"};
+			complement = "#b3caf5";
 			break;
 		default:
 			console.log("Theme Error " + themeNumber);
 	}
 	
 	$(card).css(css);
+	$(card).find("h1").css({"color": complement});
 	
-	var inverse = inverseColor($(card).css("background-color"));
+	var inverse = getInverse($(card).css("background-color"));
 	
 	$(card).find(".btn").css({
 		"color": inverse,
-		"border-color": inverse
+		"border-color": inverse,
+		"background-color": "transparent"
 	});
 	
 	$(card).find(".btn").hover(function(){
@@ -157,7 +194,7 @@ function theme(card){
 	});
 }
 
-function inverseColor(color){
+function getInverse(color){
 	var r = (255 - color.slice(4, 7)).toString(16);
 	var g = (255 - color.slice(9, 12)).toString(16);
 	var b = (255 - color.slice(14, 17)).toString(16);
@@ -301,6 +338,7 @@ function submitPrompt(){
 function submitDrawing(){
 	var message = {};
 	message.type = "submitDrawing";
+	message.image = canvas.toDataURL('image/png');
 	
 	sendMessage(message);
 }

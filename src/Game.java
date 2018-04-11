@@ -32,6 +32,7 @@ public class Game {
 	private String key;
 	private String stage;
 	private int promptCounter;
+	private boolean booting;
 	
 	public Game(User owner, String name, int size) {
 		this.owner = owner;
@@ -40,6 +41,7 @@ public class Game {
 		this.key = Utils.generateKey();
 		this.stage = "filling";
 		this.promptCounter = 0;
+		this.booting = false;
 		
 		games.put(this.key, this);
 		
@@ -80,6 +82,8 @@ public class Game {
 	 * Ends the game. Normally called by the next() function
 	 */
 	private void end() {
+		this.stage = "end";
+		
 		for (int i = 0; i < users.size(); i++) {
 			users.get(i).setStage("end");
 			users.get(i).setPageUpdated(true);
@@ -129,10 +133,14 @@ public class Game {
 			next();
 			break;
 		case "submitDrawing":
-			timeline.add("*Drawing*");
+			timeline.add((String) request.get("image"));
 			
 			next();
 			break;
+		case "exit":
+			user.leaveGame();
+			
+			return Utils.getPage(user);
 		default:
 			System.out.println("No Game case for request of type " + request.get("type"));
 			return 1;
@@ -184,13 +192,55 @@ public class Game {
 		
 		return 0;
 	}
+	
+	public void removeUser(User u) {
+		users.remove(u);
+		u.setGame(null);
+		
+		// Boot everyone out and remove the game
+		if (users.size() < 3 && !booting) {
+			booting = true;
+			
+			for (User user : users) {
+				user.leaveGame();
+			}
+			
+			games.remove(this.key);
+		}
+	}
 
 	public ArrayList<User> getUsers(){
 		return users;
 	}
 	
+	public String getUsersString() {
+		String ret = "[";
+		
+		for (User u : users) {
+			ret += "\"" + u.getName() + "\",";
+		}
+		
+		ret = ret.substring(0, ret.length() - 1);
+		ret += "]";
+		
+		return ret;
+	}
+	
 	public ArrayList<String> getTimeline(){
 		return timeline;
+	}
+	
+	public String getTimelineString() {
+		String ret = "[";
+		
+		for (String s : timeline) {
+			ret += "\"" + s + "\",";
+		}
+		
+		ret = ret.substring(0, ret.length() - 1);
+		ret += "]";
+		
+		return ret;
 	}
 	
 	public String getName() {

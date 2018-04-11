@@ -54,6 +54,9 @@ public class RequestHandler {
 		switch ((String) request.get("type")) {
 		case "getPage":
 			break;
+		case "exit":
+			user.setStage("init");
+			break;
 		case "createRoomForm":
 			if (user.getStage() != "init")
 				return 1;
