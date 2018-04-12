@@ -36,6 +36,7 @@ $.fn.extend({
 
 // Used to keep track of individual notifications
 var notificationCounter = 0;
+var lastTheme = 10;
 
 /**
  * Displays a little notification in the corner
@@ -95,7 +96,7 @@ function newCard(json){
  */
 function populatePage(json){
 	if (json.key != null && document.getElementById("key") != null)
-		document.getElementById("key").innerHTML = json.key;
+		document.getElementById("key").innerHTML = "\"" + json.key + "\"";
 	
 	if (json.roomName != null && document.getElementById("roomName") != null)
 		document.getElementById("roomName").innerHTML = json.roomName;
@@ -144,6 +145,11 @@ function theme(card){
 	var css;
 	var complement;
 	var themeNumber = Math.floor(Math.random() * 5);
+	
+	if (themeNumber == lastTheme)
+		themeNumber = (themeNumber + 1) % 5;
+		
+	lastTheme = themeNumber;
 	
 	switch (themeNumber){
 		case 0:
@@ -310,11 +316,6 @@ function joinRoom(){
 	
 	if (message.username.length == 0){
 		notify("warning", "Please specify a username");
-		return;
-	}
-	
-	if (isNaN(message.roomkey) || message.roomkey.toString().length != 5){
-		notify("warning", "Please specify a valid room key. Room keys consist of 5 numbers.");
 		return;
 	}
 	

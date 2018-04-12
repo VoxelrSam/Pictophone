@@ -131,6 +131,8 @@ h2 {
 	position: fixed;
 	top: 30px;
 	right: 30px;
+	font-family: VanillaExtract;
+	font-size: 30px;
 }
 
 .scribbleInput {

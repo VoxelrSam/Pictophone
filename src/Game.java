@@ -38,7 +38,7 @@ public class Game {
 		this.owner = owner;
 		this.name = name;
 		this.size = size;
-		this.key = Utils.generateKey();
+		this.key = Utils.generateWordKey();
 		this.stage = "filling";
 		this.promptCounter = 0;
 		this.booting = false;

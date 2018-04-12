@@ -1,7 +1,11 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
 
@@ -83,6 +87,47 @@ public class Utils {
 		}
 		
 		return key;
+	}
+	
+	/**
+	 * Generate a key of 5 random numbers to use for authentication
+	 * 
+	 * @return the key generated
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 */
+	public static String generateWordKey() {
+		String path = "F:\\GitHub\\Pictophone\\";
+		ArrayList<String> nouns = new ArrayList<>();
+		ArrayList<String> adjectives = new ArrayList<>();
+		
+		try (BufferedReader br = new BufferedReader(new FileReader(path + "nouns.txt"))){
+			String line;
+			while ((line = br.readLine()) != null) {
+				nouns.add(line);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		try (BufferedReader br = new BufferedReader(new FileReader(path + "adjectives.txt"))){
+			String line;
+			while ((line = br.readLine()) != null) {
+				adjectives.add(line);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		return adjectives.get((int) (Math.random() * adjectives.size())) + " " + nouns.get((int) (Math.random() * nouns.size()));
 	}
 	
 	/**
