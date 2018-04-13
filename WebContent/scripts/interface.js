@@ -117,7 +117,7 @@ function populatePage(json){
 		ids[ids.length - 1].innerHTML = sessionStorage["name"];
 	}
 	
-	if (document.getElementsByClassName("timer") != null)
+	if (document.getElementById("timer") != null)
 		startTimer(60, null);
 }
 
