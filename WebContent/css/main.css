@@ -114,6 +114,13 @@ h2 {
 	cursor: pointer;
 }
 
+#timer{
+	animation-duration: .5s;
+	margin:auto;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
 /* Classes */
 
 .card {

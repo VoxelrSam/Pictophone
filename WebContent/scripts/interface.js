@@ -37,6 +37,7 @@ $.fn.extend({
 // Used to keep track of individual notifications
 var notificationCounter = 0;
 var lastTheme = 10;
+var timer;
 
 /**
  * Displays a little notification in the corner
@@ -115,6 +116,9 @@ function populatePage(json){
 		
 		ids[ids.length - 1].innerHTML = sessionStorage["name"];
 	}
+	
+	if (document.getElementsByClassName("timer") != null)
+		startTimer(60, null);
 }
 
 function buildTimeline(timeline, users){
@@ -272,6 +276,32 @@ function transitionCards(cards){
 		$(cards[1]).animateCss(name, function(){
 			$(cards[0]).remove();
 		});
+	}
+}
+
+function startTimer(seconds, func){
+	document.getElementById("timer").innerHTML = seconds;
+	sessionStorage["timer"] = seconds;
+
+	timer = setInterval(tick, 1000);
+	setTimeout(function(){$("#timer").animateCss("pulse")}, 800);
+}
+
+function tick(){
+	var time = sessionStorage["timer"];
+	time--;
+	
+	sessionStorage["timer"] = time;
+	
+	if (time == 0){
+		document.getElementById("timer").innerHTML = 0;
+		window.clearInterval(timer);
+		
+		// End Timer Function
+		
+	} else {
+		document.getElementById("timer").innerHTML = time;
+		setTimeout(function(){$("#timer").animateCss("pulse")}, 800);
 	}
 }
 
