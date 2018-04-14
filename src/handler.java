@@ -14,14 +14,16 @@ import javax.websocket.Session;
 @ServerEndpoint("/socketHandler")
 public class handler {
 	@OnOpen
-	public void onOpen() {
+	public void onOpen(Session session) {
 		System.out.println("Connection Found!");
 	}
 	 
 	@OnClose
-	public void onClose(CloseReason c) {
+	public void onClose(CloseReason c, Session session) {
 		System.out.println("Connection Ended: " + c.getReasonPhrase());
-		// TODO: Delete temp users and add delete timer for logged users
+		
+		// TODO: Add delete timer for users
+		
 	}
 	 
 	@OnMessage

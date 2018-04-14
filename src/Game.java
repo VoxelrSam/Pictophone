@@ -9,7 +9,6 @@ import org.json.simple.JSONObject;
  * Handles all the game logic and keeping track of users
  * 
  * @author Samuel Ingram
- *
  */
 public class Game {
 	
@@ -213,6 +212,11 @@ public class Game {
 		return users;
 	}
 	
+	/**
+	 * Get a String representing the users that is parsable by JavaScript
+	 * 
+	 * @return The parsable String
+	 */
 	public String getUsersString() {
 		String ret = "[";
 		
@@ -230,6 +234,11 @@ public class Game {
 		return timeline;
 	}
 	
+	/**
+	 * Get a String representing the timeline that is parsable by JavaScript
+	 * 
+	 * @return The parsable String
+	 */
 	public String getTimelineString() {
 		String ret = "[";
 		

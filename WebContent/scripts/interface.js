@@ -36,7 +36,11 @@ $.fn.extend({
 
 // Used to keep track of individual notifications
 var notificationCounter = 0;
+
+// Keep track of the last theme used as to not repeat them back to back
 var lastTheme = 10;
+
+// Timer variable used for stopping the timer
 var timer;
 
 /**
@@ -79,15 +83,22 @@ function newCard(json){
 	if (document.getElementById("canvas") != null)
 		initDrawer();
 	
-	// Fill in the information
-	populatePage(json);
-	
 	// Theme and animate if we need to swap cards
 	var cards = document.getElementsByClassName("card");
 	if (cards.length == 2){
+		populatePage(json, cards[1]);
 		theme(cards[1]);
+		
+		if ($(cards[1]).find("#timer")[0] != null)
+			startTimer(60, null);
+		
 		transitionCards(cards);
 	} else {
+		populatePage(json, cards[0]);
+		
+		if ($(cards[0]).find("#timer")[0] != null)
+			continueTimer();
+		
 		theme(cards[0]);
 	}
 }
@@ -95,17 +106,17 @@ function newCard(json){
 /**
  * Fills in the info on the page given by the server
  */
-function populatePage(json){
-	if (json.key != null && document.getElementById("key") != null)
-		document.getElementById("key").innerHTML = "\"" + json.key + "\"";
+function populatePage(json, card){
+	if (json.key != null && $(card).find("#key")[0] != null)
+		$(card).find("#key")[0].innerHTML = "\"" + json.key + "\"";
 	
-	if (json.roomName != null && document.getElementById("roomName") != null)
-		document.getElementById("roomName").innerHTML = json.roomName;
+	if (json.roomName != null && $(card).find("#roomName")[0] != null)
+		$(card).find("#roomName")[0].innerHTML = json.roomName;
 	
-	if (json.prompt != null && document.getElementById("prompt") != null)
-		document.getElementById("prompt").innerHTML = "\"" + json.prompt + "\"";
+	if (json.prompt != null && $(card).find("#prompt")[0] != null)
+		$(card).find("#prompt")[0].innerHTML = "\"" + json.prompt + "\"";
 	
-	if (json.timeline != null && document.getElementById("timeline") != null)
+	if (json.timeline != null && $(card).find("#timeline")[0] != null)
 		buildTimeline(JSON.parse(json.timeline), JSON.parse(json.users));
 		
 	if (json.image != null && document.getElementsByClassName("drawing") != null)
@@ -116,11 +127,11 @@ function populatePage(json){
 		
 		ids[ids.length - 1].innerHTML = sessionStorage["name"];
 	}
-	
-	if (document.getElementById("timer") != null)
-		startTimer(60, null);
 }
 
+/**
+ * Build out the representation for the timeline (Used at game end)
+ */
 function buildTimeline(timeline, users){
 	var div = document.getElementById("timeline");
 
@@ -204,6 +215,9 @@ function theme(card){
 	});
 }
 
+/**
+ * Get the opposite color of the one passed in
+ */
 function getInverse(color){
 	var r = (255 - color.slice(4, 7)).toString(16);
 	var g = (255 - color.slice(9, 12)).toString(16);
@@ -279,7 +293,10 @@ function transitionCards(cards){
 	}
 }
 
-function startTimer(seconds, func){
+/**
+ * Start the timer on the interface
+ */
+function startTimer(seconds){
 	document.getElementById("timer").innerHTML = seconds;
 	sessionStorage["timer"] = seconds;
 
@@ -287,18 +304,33 @@ function startTimer(seconds, func){
 	setTimeout(function(){$("#timer").animateCss("pulse")}, 800);
 }
 
+/**
+ * Continue the timer where it left off if the user refreshes the page
+ */
+function continueTimer(){
+	timer = setInterval(tick, 1000);
+	setTimeout(function(){$("#timer").animateCss("pulse")}, 800);
+}
+
+/**
+ * Called once per second via the timer.
+ * Counts down and executes a submission at the end.
+ */
 function tick(){
 	var time = sessionStorage["timer"];
 	time--;
 	
 	sessionStorage["timer"] = time;
 	
-	if (time == 0){
+	if (time < 1){
 		document.getElementById("timer").innerHTML = 0;
 		window.clearInterval(timer);
 		
 		// End Timer Function
-		
+		if (document.getElementById("canvas") != null)
+			submitDrawing();
+		else
+			submitPrompt();
 	} else {
 		document.getElementById("timer").innerHTML = time;
 		setTimeout(function(){$("#timer").animateCss("pulse")}, 800);
@@ -353,7 +385,7 @@ function joinRoom(){
 }
 
 /**
- * Validate and send form for submiting a prompt
+ * Send a typed prompt
  */
 function submitPrompt(){
 	var message = {};

@@ -90,13 +90,12 @@ public class Utils {
 	}
 	
 	/**
-	 * Generate a key of 5 random numbers to use for authentication
+	 * Generate a key consisting of an adjective and noun to use for authentication
 	 * 
 	 * @return the key generated
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
 	 */
 	public static String generateWordKey() {
+		// TODO: Change to a better path
 		String path = "F:\\GitHub\\Pictophone\\";
 		ArrayList<String> nouns = new ArrayList<>();
 		ArrayList<String> adjectives = new ArrayList<>();
@@ -137,9 +136,8 @@ public class Utils {
 	 * @return 0 if successful, 1 if not
 	 */
 	public static String getFileContents(String fileName) {
-		//System.out.println(System.getProperty("user.dir"));
-		
 		try {
+			// TODO: Change to a better path
 			byte[] data = Files.readAllBytes(Paths.get("F:\\GitHub\\Pictophone\\" + fileName));
 			return new String(data, Charset.defaultCharset());
 		} catch (IOException e) {

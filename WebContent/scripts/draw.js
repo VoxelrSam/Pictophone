@@ -12,6 +12,9 @@ var clickY = new Array();
 var clickDrag = new Array();
 var clickColor = new Array();
 
+/**
+ * Initialize all the listeners needed for drawing
+ */
 function initDrawer(){
 	// Initialize jscolor
 	jscolor.installByClassName("jscolor");
@@ -76,6 +79,9 @@ function initDrawer(){
 	});
 }
 
+/**
+ * Record a draw point
+ */
 function addClick(x, y, dragging){
 	clickX.push(x);
 	clickY.push(y);
@@ -86,7 +92,11 @@ function addClick(x, y, dragging){
 		clickColor.push("#ffffff");
 }
 
+/**
+ * Redraw the canvas
+ */
 function redraw(){
+	// Clear it first
 	context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 	
 	context.strokeStyle = color;
@@ -108,6 +118,9 @@ function redraw(){
 	}
 }
 
+/**
+ * Clear the entire drawing when the clear button is pushed.
+ */
 function clear(){
 	if (!confirm("Are you sure you want to clear the drawing?"))
 		return;
@@ -119,6 +132,9 @@ function clear(){
 	clickColor = new Array();
 }
 
+/**
+ * Resize the canvas to handle the various resolutions it can be
+ */
 function resizeCanvas(){
 	var container = document.getElementById("canvasContainer");
 	
@@ -128,10 +144,20 @@ function resizeCanvas(){
 	redraw();
 }
 
+/**
+ * Set the color of the brush
+ *
+ * @param jscolor The color to change to as chosen with jscolor
+ */
 function setColor(jscolor){
 	color = "#" + jscolor;
 }
 
+/**
+ * Turn the eraser tool on and off
+ *
+ * @param value A boolean representing whether to turn it on or off
+ */
 function setEraser(value){
 	eraser = value;
 }

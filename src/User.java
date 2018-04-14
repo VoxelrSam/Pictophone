@@ -60,6 +60,9 @@ public class User {
 		return 0;
 	}
 	
+	/**
+	 * Remove the user from the current game and go to main page
+	 */
 	public void leaveGame() {
 		this.getGame().removeUser(this);
 		this.setStage("init");
