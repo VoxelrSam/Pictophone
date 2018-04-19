@@ -43,6 +43,12 @@ var lastTheme = 10;
 // Timer variable used for stopping the timer
 var timer;
 
+// Keeps track of the game selected in the Public Games list
+var selectedGame;
+
+// Keeps track of the complement color for the current scheme
+var complement;
+
 /**
  * Displays a little notification in the corner
  *
@@ -127,6 +133,12 @@ function populatePage(json, card){
 		
 		ids[ids.length - 1].innerHTML = sessionStorage["name"];
 	}
+	
+	if (json.users != null)
+		updateUsers(json);
+		
+	if (json.games != null)
+		updateGameList(JSON.parse(json.games));
 }
 
 /**
@@ -158,7 +170,6 @@ function buildTimeline(timeline, users){
  */
 function theme(card){
 	var css;
-	var complement;
 	var themeNumber = Math.floor(Math.random() * 5);
 	
 	if (themeNumber == lastTheme)
@@ -338,6 +349,70 @@ function tick(){
 }
 
 /**
+ * Update the user list/count
+ */
+function updateUsers(json){
+	var users = JSON.parse(json.users);
+
+	if (document.getElementById("userCount") != null){
+		document.getElementById("userCount").innerHTML = users.length + "/" + json.roomsize;
+	}
+	
+	if (document.getElementsByClassName("identifier") != null){
+		var ids = document.getElementsByClassName("identifier");
+		
+		var names = sessionStorage["name"];
+		
+		for (var i = 0; i < users.length; i++){
+			if (users[i] === sessionStorage["name"])
+				continue;
+		
+			names += "<br/>" + users[i];
+		}
+		
+		ids[ids.length - 1].innerHTML = names;
+	}
+}
+
+/**
+ * Update the game list/count
+ */
+function updateGameList(list){
+	if (document.getElementById("gamesList") == null)
+		return;
+		
+	var body = document.getElementById("gamesListBody");
+	body.innerHTML = "";
+	
+	if (list.length == 0){
+		body.innerHTML += 
+			"<tr value=\"\">" + 
+				"<td>No Games Available</td>" +
+				"<td>:(</td>" +
+			"</tr>";
+	}
+	
+	for (var i = 0; i < list.length; i++){
+		var elements = list[i].split(";");
+		
+		body.innerHTML += 
+				"<tr value=\"" + elements[0] + "\">" + 
+					"<td>" + elements[1] + "</td>" +
+					"<td>" + elements[2] + "</td>" +
+				"</tr>";
+	}
+	
+	$("#gamesListBody tr").click(function(){
+		$("#gamesListBody tr").each(function(){
+			$(this).css({"background-color": "inherit"});
+		});
+		
+		selectedGame = $(this).attr("value");
+		$(this).css({"background-color": complement});
+	});
+}
+
+/**
  * Validate and send form for creating a room
  */
 function createRoom(){
@@ -345,6 +420,8 @@ function createRoom(){
 	message.type = "createRoom";
 	message.username = document.getElementById("username").value;
 	message.roomname = document.getElementById("roomname").value;
+	message.roomsize = document.getElementById("roomsize").value;
+	message.roomtype = document.getElementById("roomtype").value;
 	
 	if (message.username.length == 0){
 		notify("warning", "Please specify a username");
@@ -356,21 +433,46 @@ function createRoom(){
 		return;
 	}
 	
-	var roomsize = document.getElementById("roomsize").value;
-	if (isNaN(roomsize) || roomsize > 10 || roomsize < 3){
+	if (isNaN(message.roomsize) || message.roomsize > 10 || message.roomsize < 3){
 		notify("warning", "Please select a valid room size");
 		return;
 	}
-		
-	message.roomsize = roomsize;
+	
+	if (message.roomtype === "Room Type"){
+		notify("warning", "Please select a valid room type");
+		return;
+	}
 	
 	sendMessage(message);
 }
 
 /**
- * Validate and send form for joining a room
+ * Validate and send form for joining a public room
  */
-function joinRoom(){
+function joinPublicRoom(){
+	var message = {};
+	message.type = "joinRoom";
+	message.username = document.getElementById("username").value;
+	
+	if (selectedGame == null){
+		notify("warning", "Please pick a game first");
+		return;
+	}
+	
+	message.roomkey = selectedGame;
+	
+	if (message.username.length == 0){
+		notify("warning", "Please specify a username");
+		return;
+	}
+	
+	sendMessage(message);
+}
+
+/**
+ * Validate and send form for joining a public room
+ */
+function joinPrivateRoom(){
 	var message = {};
 	message.type = "joinRoom";
 	message.username = document.getElementById("username").value;
@@ -392,6 +494,8 @@ function submitPrompt(){
 	message.type = "submitPrompt";
 	message.prompt = document.getElementById("promptInput").value;
 	
+	window.clearInterval(timer);
+	
 	sendMessage(message);
 }
 
@@ -402,6 +506,8 @@ function submitDrawing(){
 	var message = {};
 	message.type = "submitDrawing";
 	message.image = canvas.toDataURL('image/png');
+	
+	window.clearInterval(timer);
 	
 	sendMessage(message);
 }

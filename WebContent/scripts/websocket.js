@@ -65,12 +65,24 @@ function onMessage(message){
 	console.log(json);
 	
 	// Handle message type
-	if (json.type == "newPage"){
+	switch (json.type){
+	case "newPage":
 		newCard(json);
-	} else if (json.type == "roomNotFound"){
+		break;
+	case "roomNotFound":
 		notify("warning", "Room not found with that key. Try another.");
-	} else if (json.type == "roomNotOpen"){
+		break;
+	case "roomNotOpen":
 		notify("warning", "This room is not accepting users at the moment. Try another.");
+		break;
+	case "usersUpdate":
+		updateUsers(json);
+		break;
+	case "gamesListUpdate":
+		updateGameList(JSON.parse(json.games));
+		break;
+	default:
+		console.log("Invalid message type specified: " + json.type);
 	}
 }
 

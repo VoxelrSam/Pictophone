@@ -3,13 +3,57 @@
 
 	<i id="back" class="fas fa-arrow-circle-left" onClick="sendMessage({type:'exit'})"></i>
 
-	<div style="width:500px;margin:auto;text-align:center;">
+	<div style="width:800px;margin:auto;text-align:center;">
 		<h1>Join Room</h1>
 		
 		<div style="width:150px;margin:auto;">
+			<br/>
 			<input id="username" class="form-control btn-block scribbleInput" type="text" placeholder="Your Name">
-			<input id="roomkey" class="form-control btn-block scribbleInput" type="text" placeholder="Room Key">
-			<button type="button" class="btn btn-block" onClick="joinRoom();">Join</button>
+			<br/>
+		</div>
+			
+		<div id="joinContainer">
+			<ul class="nav nav-tabs" role="tablist" style="background:none;">
+				<li class="nav-item">
+					<a class="nav-link active" id="public-tab" data-toggle="tab" href="#public" role="tab" aria-controls="public" aria-selected="true">Public Games</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="private-tab" data-toggle="tab" href="#private" role="tab" aria-controls="private" aria-selected="false">Private Game</a>
+				</li>
+			</ul>
+			
+			<div id="joinTabs" class="tab-content">
+				<div class="tab-pane fade show active" id="public" role="tabpanel" aria-labelledby="public-tab">
+					<br/>
+					
+					<h2>Public Games</h2>
+					<table id="gamesList" class="table table-hover">
+						<thead>
+							<tr>
+								<th>Room Name</th>
+								<th>User Count</th>
+							</tr>
+						</thead>
+						<tbody id="gamesListBody">
+						</tbody>
+					</table>
+					<div style="width:150px;margin:auto;">
+						<button type="button" class="btn btn-block" onClick="joinPublicRoom();">Join Game</button>
+					</div>
+					
+				</div>
+				<div class="tab-pane fade" id="private" role="tabpanel" aria-labelledby="private-tab">
+					<br/>
+				
+					<h2>Private Game</h2>
+					<div style="width:150px;margin:auto;">
+						<input id="roomkey" class="form-control btn-block scribbleInput" type="text" placeholder="Room Key">
+						<button type="button" class="btn btn-block" onClick="joinPrivateRoom();">Join Game</button>
+						<br/>
+					</div>
+					
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

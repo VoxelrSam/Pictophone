@@ -55,6 +55,9 @@ public class RequestHandler {
 		case "getPage":
 			break;
 		case "exit":
+			if (user.getStage().equals("joinRoom"))
+				User.removeFromJoining(user);
+			
 			user.setStage("init");
 			break;
 		case "createRoomForm":
@@ -67,8 +70,9 @@ public class RequestHandler {
 			if (user.getStage() != "createRoomForm")
 				return 1;
 			
-			User.getUsers().get(request.get("id")).setName((String) request.get("username"));
-			new Game(User.getUsers().get(request.get("id")), (String) request.get("roomname"), Integer.parseInt((String) request.get("roomsize")));
+			user.setName((String) request.get("username"));
+			boolean isPublic = ((String) request.get("roomtype")).equals("Public");
+			new Game(user, (String) request.get("roomname"), Integer.parseInt((String) request.get("roomsize")), isPublic);
 			
 			user.setStage("ownerWait");
 			break;
@@ -77,6 +81,8 @@ public class RequestHandler {
 				return 1;
 			
 			user.setStage("joinRoom");
+			
+			User.addToJoining(user);
 			break;
 		case "joinRoom":
 			if (user.getStage() != "joinRoom")
@@ -91,6 +97,8 @@ public class RequestHandler {
 				return 1;
 			}
 			
+			user.setName((String) request.get("username"));
+			
 			if (g.addUser(user) != 0) {
 				// Could not add user
 				JSONObject response = new JSONObject();
@@ -99,7 +107,8 @@ public class RequestHandler {
 				return 1;
 			}
 			
-			user.setName((String) request.get("username"));
+			if (user.getStage().equals("joinRoom"))
+				User.removeFromJoining(user);
 			
 			// Avoid double page send
 			if (g.getStage().equals("playing"))

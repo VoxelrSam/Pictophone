@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.websocket.Session;
@@ -17,6 +18,8 @@ public class User {
 	 */
 	private static HashMap<String, User> users = new HashMap<String, User>();
 	
+	private static ArrayList<User> joiningUsers = new ArrayList<>();
+	
 	private String name;
 	private String id;
 	private Session session;
@@ -29,6 +32,9 @@ public class User {
 		this.session = session;
 		this.stage = "init";
 		this.pageUpdated = false;
+		
+		// Set buffer size so we can actually send files
+		this.session.setMaxTextMessageBufferSize(524288);
 		
 		User.add(this);
 		
@@ -44,6 +50,7 @@ public class User {
 	public int send(JSONObject message) {
 		message.put("id", this.getId());
 		message.put("name", this.getName());
+		message.put("stage", this.getStage());
 		if (this.getGame() != null) {
 			message.put("roomName", this.getGame().getName());
 			message.put("gameKey", this.getGame().getKey());
@@ -82,6 +89,7 @@ public class User {
 	
 	public void setSession(Session session) {
 		this.session = session;
+		this.session.setMaxTextMessageBufferSize(524288);
 	}
 	
 	public Game getGame() {
@@ -110,6 +118,18 @@ public class User {
 	
 	public static void add(User u) {
 		users.put(u.getId(), u);
+	}
+	
+	public static ArrayList<User> getJoiningUsers() {
+		return joiningUsers;
+	}
+	
+	public static void addToJoining(User u) {
+		joiningUsers.add(u);
+	}
+	
+	public static void removeFromJoining(User u) {
+		joiningUsers.remove(u);
 	}
 	
 	public static HashMap<String, User> getUsers(){

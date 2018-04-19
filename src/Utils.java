@@ -37,26 +37,35 @@ public class Utils {
 		case "ownerWait":
 			fileName = "ownerWait.html";
 			response.put("key", user.getGame().getKey());
+			response.put("users", user.getGame().getUsersString());
+			response.put("roomsize", user.getGame().getSize());
 			break;
 		case "joinRoom":
 			fileName = "joinRoom.html";
+			response.put("games", Game.getPublicGames());
 			break;
 		case "waiting":
 			fileName = "waiting.html";
+			response.put("users", user.getGame().getUsersString());
+			response.put("roomsize", user.getGame().getSize());
 			break;
 		case "prompting":
 			fileName = "prompt.html";
+			response.put("users", user.getGame().getUsersString());
 			break;
 		case "describing":
 			fileName = "describe.html";
 			response.put("image", user.getGame().getLastSubmission());
+			response.put("users", user.getGame().getUsersString());
 			break;
 		case "drawing":
 			fileName = "draw.html";
 			response.put("prompt", user.getGame().getLastSubmission());
+			response.put("users", user.getGame().getUsersString());
 			break;
 		case "done":
 			fileName = "waiting.html";
+			response.put("users", user.getGame().getUsersString());
 			break;
 		case "end":
 			fileName = "end.html";
