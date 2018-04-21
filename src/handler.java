@@ -13,6 +13,7 @@ import javax.websocket.Session;
  */
 @ServerEndpoint("/socketHandler")
 public class handler {
+	
 	@OnOpen
 	public void onOpen(Session session) {
 		System.out.println("Connection Found!");

@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -104,12 +106,10 @@ public class Utils {
 	 * @return the key generated
 	 */
 	public static String generateWordKey() {
-		// TODO: Change to a better path
-		String path = "F:\\GitHub\\Pictophone\\";
 		ArrayList<String> nouns = new ArrayList<>();
 		ArrayList<String> adjectives = new ArrayList<>();
 		
-		try (BufferedReader br = new BufferedReader(new FileReader(path + "nouns.txt"))){
+		try (BufferedReader br = new BufferedReader(new FileReader(getPath("nouns.txt")))){
 			String line;
 			while ((line = br.readLine()) != null) {
 				nouns.add(line);
@@ -122,7 +122,7 @@ public class Utils {
 			return null;
 		}
 		
-		try (BufferedReader br = new BufferedReader(new FileReader(path + "adjectives.txt"))){
+		try (BufferedReader br = new BufferedReader(new FileReader(getPath("adjectives.txt")))){
 			String line;
 			while ((line = br.readLine()) != null) {
 				adjectives.add(line);
@@ -146,8 +146,7 @@ public class Utils {
 	 */
 	public static String getFileContents(String fileName) {
 		try {
-			// TODO: Change to a better path
-			byte[] data = Files.readAllBytes(Paths.get("F:\\GitHub\\Pictophone\\" + fileName));
+			byte[] data = Files.readAllBytes(Paths.get(getPath(fileName)));
 			return new String(data, Charset.defaultCharset());
 		} catch (IOException e) {
 			System.out.println("File not found: " + fileName);
@@ -155,5 +154,29 @@ public class Utils {
 			
 			return "";
 		}
+	}
+	
+	/**
+	 * Returns path to file in WEB-INF folder
+	 * Work around for finding the WEB-INF folder brought to you by
+	 * https://dzone.com/articles/get-current-web-application
+	 * 
+	 * @param file The name of the file to get the path to
+	 * @return A String representing the fully expanded path
+	 */
+	private static String getPath(String file) {
+		String path = Utils.class.getClassLoader().getResource("").getPath();
+		String fullPath;
+		try {
+			fullPath = URLDecoder.decode(path, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			fullPath = null;
+		}
+		
+		fullPath = fullPath.split("classes/")[0];
+		fullPath = fullPath.substring(1, fullPath.length()).replace("/", "\\");
+		
+		return fullPath + "lib\\" + file;
 	}
 }
