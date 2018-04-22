@@ -3,9 +3,6 @@ Sources:
 JuneGloom font
 http://www.fontspace.com/des/junegloom
 
-Note_this font
-https://www.fontsquirrel.com/fonts/Note-this
-
 icons
 https://fontawesome.com/
 
