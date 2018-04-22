@@ -9,7 +9,15 @@ var webSocket;
  * Connect the WebSocket to the server (called by body's onLoad function)
  */
 function connect(){
-	webSocket = new WebSocket("ws://localhost:8080/Pictophone/socketHandler");
+	var url;
+	if (window.location.protocol === "https:"){
+		url = "wss://";
+	} else {
+		url = "ws://";
+	}
+	url += window.location.host + "/Pictophone/socketHandler";
+	
+	webSocket = new WebSocket(url);
 
 	webSocket.onopen = function(message){ onOpen(message)};
 	webSocket.onmessage = function(message){ onMessage(message)};

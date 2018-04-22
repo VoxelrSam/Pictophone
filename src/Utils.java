@@ -33,6 +33,9 @@ public class Utils {
 		case "init":
 			fileName = "start.html";
 			break;
+		case "login":
+			fileName = "login.html";
+			break;
 		case "createRoomForm":
 			fileName = "createRoom.html";
 			break;
@@ -86,14 +89,14 @@ public class Utils {
 	}
 	
 	/**
-	 * Generate a key of 5 random numbers to use for authentication
+	 * Generate a key of 10 random numbers to use for authentication
 	 * 
 	 * @return the key generated
 	 */
 	public static String generateKey() {
 		String key = "";
 		
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 10; i++) {
 			key += (int) (Math.random() * 10);
 		}
 		

@@ -60,6 +60,9 @@ public class RequestHandler {
 			
 			user.setStage("init");
 			break;
+		case "loginForm":
+			user.setStage("login");
+			break;
 		case "createRoomForm":
 			if (user.getStage() != "init")
 				return 1;
