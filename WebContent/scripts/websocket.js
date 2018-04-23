@@ -83,6 +83,9 @@ function onMessage(message){
 	case "roomNotOpen":
 		notify("warning", "This room is not accepting users at the moment. Try another.");
 		break;
+	case "addUserError":
+		notify("warning", "User was not created successfully...");
+		break;
 	case "usersUpdate":
 		updateUsers(json);
 		break;

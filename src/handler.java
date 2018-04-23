@@ -17,7 +17,6 @@ public class Handler {
 	@OnOpen
 	public void onOpen(Session session) {
 		System.out.println("Connection Found!");
-		DatabaseConnector.createTable();
 	}
 	 
 	@OnClose

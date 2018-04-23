@@ -138,6 +138,11 @@ function signup(){
 		return;
 	}
 	
+	if (message.username.length > 16){
+		notify("warning", "Please keep usernames under 16 characters in length");
+		return;
+	}
+	
 	if (message.password.length == 0){
 		notify("warning", "Please specify a password");
 		return;

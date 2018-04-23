@@ -63,6 +63,9 @@ public class RequestHandler {
 		case "loginForm":
 			user.setStage("login");
 			break;
+		case "signup":
+			user.signup((String) request.get("username"), (String) request.get("password"));
+			break;
 		case "createRoomForm":
 			if (user.getStage() != "init")
 				return 1;

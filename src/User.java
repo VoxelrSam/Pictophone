@@ -67,6 +67,20 @@ public class User {
 		return 0;
 	}
 	
+	public void signup(String user, String pass) {
+		
+		if (DatabaseConnector.addUser(user, pass) != 0) {
+			JSONObject message = new JSONObject();
+			message.put("type", "addUserError");
+			
+			this.send(message);
+			return;
+		}
+		
+		this.setStage("init");
+		this.setName(user);
+	}
+	
 	/**
 	 * Remove the user from the current game and go to main page
 	 */

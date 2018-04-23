@@ -79,6 +79,36 @@ public class DatabaseConnector {
 		return null;
 	}
 	
+	public static int addUser(String user, String pass) {
+		// TODO: hash password
+		
+		Connection conn = null;
+		try {
+			conn = getRemoteConnection();
+			
+			// TODO: Prevent SQL Injection and check if user exists first
+			Statement setup = conn.createStatement();
+			setup.addBatch("INSERT INTO users (username, password) VALUES ('" + user + "', '" + pass + "')");
+			setup.executeBatch();
+			setup.close();
+			
+		} catch (SQLException ex) {
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+			
+			System.out.println("Closing the connection.");
+		    if (conn != null) try { conn.close(); } catch (SQLException ignore) {}
+		    
+		    return 1;
+		}
+		
+		System.out.println("Closing the connection.");
+		if (conn != null) try { conn.close(); } catch (SQLException ignore) {}
+		
+		return 0;
+	}
+	
 	/**
 	 * TEST CODE, WILL REMOVE
 	 */
