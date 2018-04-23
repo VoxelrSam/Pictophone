@@ -1,4 +1,8 @@
 /**
+ * Used for validating and submitting forms
+ */
+
+/**
  * Validate and send form for creating a room
  */
 function createRoom(){
@@ -98,6 +102,9 @@ function submitDrawing(){
 	sendMessage(message);
 }
 
+/**
+ * Send login information
+ */
 function login(){
 	var message = {};
 	message.type = "login";
@@ -117,6 +124,9 @@ function login(){
 	sendMessage(message);
 }
 
+/**
+ * Send signup information
+ */
 function signup(){
 	var message = {};
 	message.type = "signup";

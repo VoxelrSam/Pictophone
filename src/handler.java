@@ -12,11 +12,12 @@ import javax.websocket.Session;
  * @author Samuel Ingram
  */
 @ServerEndpoint("/socketHandler")
-public class handler {
+public class Handler {
 	
 	@OnOpen
 	public void onOpen(Session session) {
 		System.out.println("Connection Found!");
+		DatabaseConnector.createTable();
 	}
 	 
 	@OnClose

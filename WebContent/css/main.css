@@ -6,11 +6,6 @@
 /* Fonts */
 
 @font-face {
-    font-family: Note_this;
-    src: url(../fonts/Note_this.ttf);
-}
-
-@font-face {
     font-family: JuneGloom;
     src: url(../fonts/JuneGloom.ttf);
 }
