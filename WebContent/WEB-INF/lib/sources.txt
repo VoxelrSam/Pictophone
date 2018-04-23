@@ -11,3 +11,6 @@ https://www.toptal.com/designers/subtlepatterns/
 
 Vanilla Extract
 https://www.1001freefonts.com/vanilla-extract.font
+
+MySQL Connector
+https://dev.mysql.com/downloads/connector/j/
