@@ -14,3 +14,6 @@ https://www.1001freefonts.com/vanilla-extract.font
 
 MySQL Connector
 https://dev.mysql.com/downloads/connector/j/
+
+BCrypt
+http://www.mindrot.org/projects/jBCrypt/

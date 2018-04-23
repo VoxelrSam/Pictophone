@@ -77,14 +77,8 @@ function onMessage(message){
 	case "newPage":
 		newCard(json);
 		break;
-	case "roomNotFound":
-		notify("warning", "Room not found with that key. Try another.");
-		break;
-	case "roomNotOpen":
-		notify("warning", "This room is not accepting users at the moment. Try another.");
-		break;
-	case "addUserError":
-		notify("warning", "User was not created successfully...");
+	case "warning":
+		notify("warning", json.message);
 		break;
 	case "usersUpdate":
 		updateUsers(json);

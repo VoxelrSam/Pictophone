@@ -26,12 +26,14 @@ public class User {
 	private Game currentGame;
 	private String stage;
 	private boolean pageUpdated;
+	private boolean isLoggedIn;
 	
 	public User(Session session) {
 		this.id = Utils.generateKey();
 		this.session = session;
 		this.stage = "init";
 		this.pageUpdated = false;
+		this.isLoggedIn = false;
 		
 		// Set buffer size so we can actually send files
 		this.session.setMaxTextMessageBufferSize(524288);
@@ -51,6 +53,7 @@ public class User {
 		message.put("id", this.getId());
 		message.put("name", this.getName());
 		message.put("stage", this.getStage());
+		message.put("isLoggedIn", this.isLoggedIn);
 		if (this.getGame() != null) {
 			message.put("roomName", this.getGame().getName());
 			message.put("gameKey", this.getGame().getKey());
@@ -67,18 +70,57 @@ public class User {
 		return 0;
 	}
 	
-	public void signup(String user, String pass) {
+	/**
+	 * Send a warning message to the user to be displayed
+	 * 
+	 * @param message The message to send
+	 */
+	public void warn(String message) {
+		JSONObject warning = new JSONObject();
+		warning.put("type", "warning");
+		warning.put("message", message);
 		
-		if (DatabaseConnector.addUser(user, pass) != 0) {
-			JSONObject message = new JSONObject();
-			message.put("type", "addUserError");
-			
-			this.send(message);
-			return;
+		this.send(warning);
+	}
+	
+	/**
+	 * Try to sign up the user
+	 * 
+	 * @param name The username to be used. Must be unique
+	 * @param pass The password to be used
+	 * @return true if successful, false if not
+	 */
+	public boolean signup(String name, String pass) {
+		// TODO: add server side form validation (i.e. name must be less than 16 characters)
+		
+		if (DatabaseConnector.addUser(this, name, pass) != 0) {
+			return false;
 		}
 		
 		this.setStage("init");
-		this.setName(user);
+		this.setName(name);
+		this.isLoggedIn = true;
+		
+		return true;
+	}
+	
+	/**
+	 * Try to login the user
+	 * 
+	 * @param name The username to be checked
+	 * @param pass The password to be checked
+	 * @return true if successful, false if not
+	 */
+	public boolean login(String name, String pass) {
+		if (DatabaseConnector.verifyUser(this, name, pass) != 0) {
+			return false;
+		}
+		
+		this.setStage("init");
+		this.setName(name);
+		this.isLoggedIn = true;
+		
+		return true;
 	}
 	
 	/**

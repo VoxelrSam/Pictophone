@@ -64,7 +64,14 @@ public class RequestHandler {
 			user.setStage("login");
 			break;
 		case "signup":
-			user.signup((String) request.get("username"), (String) request.get("password"));
+			if (!user.signup((String) request.get("username"), (String) request.get("password"))) {
+				return 1;
+			}
+			break;
+		case "login":
+			if (!user.login((String) request.get("username"), (String) request.get("password"))) {
+				return 1;
+			}
 			break;
 		case "createRoomForm":
 			if (user.getStage() != "init")
@@ -97,9 +104,7 @@ public class RequestHandler {
 			g = Game.getGame((String) request.get("roomkey"));
 			if (g == null) {
 				// Game does not exist
-				JSONObject response = new JSONObject();
-				response.put("type", "roomNotFound");
-				user.send(response);
+				user.warn("Room not found with that key. Try another.");
 				return 1;
 			}
 			
@@ -107,9 +112,7 @@ public class RequestHandler {
 			
 			if (g.addUser(user) != 0) {
 				// Could not add user
-				JSONObject response = new JSONObject();
-				response.put("type", "roomNotOpen");
-				user.send(response);
+				user.warn("This room is not accepting users at the moment. Try another.");
 				return 1;
 			}
 			
