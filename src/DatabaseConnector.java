@@ -1,6 +1,6 @@
-import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -114,20 +114,10 @@ public class DatabaseConnector {
 			conn = getRemoteConnection();
 			
 			// Check if user exists
-			String query = "SELECT * FROM users WHERE username = ?";
-			try (PreparedStatement statement = conn.prepareStatement(query)){
-				statement.setString(1, name);
-				try(ResultSet resultSet = statement.executeQuery()){
-					if (resultSet.next()) {
-						// User already exists
-						user.warn("User already exists...");
-						resultSet.close();
-						conn.close();
-						return 2;
-					}
-					resultSet.close();
-				}
-				statement.close();
+			if (userExists(name)) {
+				user.warn("User already exists...");
+				conn.close();
+				return 2;
 			}
 			
 			// TODO: Prevent SQL Injection
@@ -193,6 +183,10 @@ public class DatabaseConnector {
 					return 3;
 				}
 				
+				user.addGamesPlayed(resultSet.getInt("games_played"));
+				user.setNameColor("#" + resultSet.getString("name_color"));
+				user.setDefaultColor("#" + resultSet.getString("default_color"));
+				
 				resultSet.close();
 			}
 			
@@ -212,67 +206,105 @@ public class DatabaseConnector {
 		return 0;
 	}
 	
-	/**
-	 * TEST CODE, WILL REMOVE
-	 */
-	public static void createTable() {
-		  Connection conn = null;
-		  Statement setupStatement = null;
-		  Statement readStatement = null;
-		  ResultSet resultSet = null;
-		  String results = "";
-		  int numresults = 0;
-		  String statement = null;
-
-		  try {
-		    // Create connection to RDS DB instance
-		    conn = getRemoteConnection();
-		    
-		    // Create a table and write two rows
-		    setupStatement = conn.createStatement();
-		    String createTable = "CREATE TABLE Beanstalk (Resource char(50));";
-		    String insertRow1 = "INSERT INTO Beanstalk (Resource) VALUES ('EC2 Instance');";
-		    String insertRow2 = "INSERT INTO Beanstalk (Resource) VALUES ('RDS Instance');";
-		    
-		    setupStatement.addBatch(createTable);
-		    setupStatement.addBatch(insertRow1);
-		    setupStatement.addBatch(insertRow2);
-		    setupStatement.executeBatch();
-		    setupStatement.close();
-		    
-		  } catch (SQLException ex) {
-		    // Handle any errors
-		    System.out.println("SQLException: " + ex.getMessage());
-		    System.out.println("SQLState: " + ex.getSQLState());
-		    System.out.println("VendorError: " + ex.getErrorCode());
-		  } finally {
-		    System.out.println("Closing the connection.");
+	public static boolean editUser(User user, JSONObject info) {
+		String prevName = user.getName();
+		if (info.get("username") != null) {
+			
+			// Check to be sure it's a new name
+			if (userExists((String) info.get("username"))) {
+				user.warn("A user by this name already exists!");
+				return false;
+			}
+			
+			user.setName((String) info.get("username"));
+		}
+		
+		String password = null;
+		if (info.get("password") != null) {
+			password = (String) info.get("password");
+			
+			// hash password
+			password = BCrypt.hashpw(password, BCrypt.gensalt());
+		}
+		
+		if (info.get("nameColor") != null) {
+			user.setNameColor((String) info.get("nameColor"));
+		}
+		
+		if (info.get("defaultColor") != null) {
+			user.setDefaultColor((String) info.get("defaultColor"));
+		}
+		
+		// Save user info to the database
+		Connection conn = null;
+		PreparedStatement setup = null;
+		try {
+			conn = getRemoteConnection();
+			
+			String optional = "";
+			if (password != null) {
+				optional = "password = ?, ";
+			}
+			
+			String command = "UPDATE users SET username = ?, " 
+								+ optional
+								+ "name_color = ?, default_color = ? WHERE username = ?";
+			setup = conn.prepareStatement(command);
+			setup.setString(1, user.getName());
+			
+			if (password == null) {
+				setup.setString(2, user.getNameColor().substring(1, user.getNameColor().length()));
+				setup.setString(3, user.getDefaultColor().substring(1, user.getDefaultColor().length()));
+				setup.setString(4, prevName);
+			} else {
+				setup.setString(2, password);
+				setup.setString(3, user.getNameColor().substring(1, user.getNameColor().length()));
+				setup.setString(4, user.getDefaultColor().substring(1, user.getDefaultColor().length()));
+				setup.setString(5, prevName);
+			}
+			
+			
+			setup.executeUpdate();
+		} catch (SQLException ex) {
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+		} finally {
+			System.out.println("Closing the connection.");
+			if (conn != null) try { conn.close(); } catch (SQLException ignore) {}
+			if (setup != null) try { setup.close(); } catch (SQLException ignore) {}
+		}
+		
+		return true;
+	}
+	
+	private static boolean userExists(String username) {
+		Connection conn = getRemoteConnection();
+		String query = "SELECT * FROM users WHERE username = ?";
+		try (PreparedStatement statement = conn.prepareStatement(query)){
+			statement.setString(1, username);
+			try(ResultSet resultSet = statement.executeQuery()){
+				if (resultSet.next()) {
+					// User already exists
+					statement.close();
+					resultSet.close();
+					conn.close();
+					return true;
+				}
+				resultSet.close();
+			}
+			statement.close();
+		} catch (SQLException ex) {
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+			
+			System.out.println("Closing the connection.");
 		    if (conn != null) try { conn.close(); } catch (SQLException ignore) {}
-		  }
-
-		  try {
-		    conn = getRemoteConnection();
 		    
-		    readStatement = conn.createStatement();
-		    resultSet = readStatement.executeQuery("SELECT Resource FROM Beanstalk;");
-
-		    resultSet.first();
-		    results = resultSet.getString("Resource");
-		    resultSet.next();
-		    results += ", " + resultSet.getString("Resource");
-		    
-		    resultSet.close();
-		    readStatement.close();
-		    conn.close();
-
-		  } catch (SQLException ex) {
-		    // Handle any errors
-		    System.out.println("SQLException: " + ex.getMessage());
-		    System.out.println("SQLState: " + ex.getSQLState());
-		    System.out.println("VendorError: " + ex.getErrorCode());
-		  } finally {
-		       System.out.println("Closing the connection.");
-		      if (conn != null) try { conn.close(); } catch (SQLException ignore) {}
-		  }
+		    return true;
+		}
+		
+		return false;
 	}
 }

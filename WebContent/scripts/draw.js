@@ -16,9 +16,6 @@ var clickColor = new Array();
  * Initialize all the listeners needed for drawing
  */
 function initDrawer(){
-	// Initialize jscolor
-	jscolor.installByClassName("jscolor");
-	
 	$("#marker").click(function(){
 		setEraser(false);
 		$(this).css({"background": "lightgrey"});
@@ -160,4 +157,8 @@ function setColor(jscolor){
  */
 function setEraser(value){
 	eraser = value;
+}
+
+function initJSColor(){
+	jscolor.installByClassName('jscolor');
 }

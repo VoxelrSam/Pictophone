@@ -1,6 +1,8 @@
 /**
  * Used for validating and submitting forms
  */
+ 
+ var newNameColor;
 
 /**
  * Validate and send form for creating a room
@@ -8,7 +10,12 @@
 function createRoom(){
 	var message = {};
 	message.type = "createRoom";
-	message.username = document.getElementById("username").value;
+	
+	if (document.getElementById("username") != null)
+		message.username = document.getElementById("username").value;
+	else
+		message.username = sessionStorage["name"];
+		
 	message.roomname = document.getElementById("roomname").value;
 	message.roomsize = document.getElementById("roomsize").value;
 	message.roomtype = document.getElementById("roomtype").value;
@@ -42,7 +49,11 @@ function createRoom(){
 function joinPublicRoom(){
 	var message = {};
 	message.type = "joinRoom";
-	message.username = document.getElementById("username").value;
+	
+	if (document.getElementById("username") != null)
+		message.username = document.getElementById("username").value;
+	else
+		message.username = sessionStorage["name"];
 	
 	if (selectedGame == null){
 		notify("warning", "Please pick a game first");
@@ -65,8 +76,13 @@ function joinPublicRoom(){
 function joinPrivateRoom(){
 	var message = {};
 	message.type = "joinRoom";
-	message.username = document.getElementById("username").value;
 	message.roomkey = document.getElementById("roomkey").value;
+	
+	
+	if (document.getElementById("username") != null)
+		message.username = document.getElementById("username").value;
+	else
+		message.username = sessionStorage["name"];
 	
 	if (message.username.length == 0){
 		notify("warning", "Please specify a username");
@@ -152,6 +168,45 @@ function signup(){
 		notify("warning", "Passwords do not match");
 		return;
 	}
+	
+	sendMessage(message);
+}
+
+/**
+ * Send changed information from the edit user page
+ */
+function saveUser(){
+	var message = {};
+	message.type = "saveUser";
+	
+	if (document.getElementById("name").value != sessionStorage["name"]){
+		message.username = document.getElementById("name").value;
+		
+		if (message.username.length == 0){
+			notify("warning", "Please specify a username");
+			return;
+		}
+		
+		if (message.username.length > 16){
+			notify("warning", "Please keep usernames under 16 characters in length");
+			return;
+		}
+	}
+	
+	if (document.getElementById("password").value.length != 0){
+		message.password = document.getElementById("password").value;
+		
+		if (message.password != document.getElementById("confirmPassword").value){
+			notify("warning", "Passwords do not match");
+			return;
+		}
+	}
+	
+	if (newNameColor.length != 0)
+		message.nameColor = newNameColor;
+	
+	if (color.length != 0)
+		message.defaultColor = color;
 	
 	sendMessage(message);
 }

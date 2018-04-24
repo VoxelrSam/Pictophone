@@ -60,6 +60,9 @@ public class RequestHandler {
 			
 			user.setStage("init");
 			break;
+		case "rules":
+			user.setStage("rules");
+			break;
 		case "loginForm":
 			user.setStage("login");
 			break;
@@ -72,6 +75,18 @@ public class RequestHandler {
 			if (!user.login((String) request.get("username"), (String) request.get("password"))) {
 				return 1;
 			}
+			break;
+		case "logout":
+			user.logout();
+			break;
+		case "editUser":
+			user.setStage("editUser");
+			break;
+		case "saveUser":
+			if (!user.save(request))
+				return 1;
+			
+			user.setStage("init");
 			break;
 		case "createRoomForm":
 			if (user.getStage() != "init")

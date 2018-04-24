@@ -27,6 +27,9 @@ public class User {
 	private String stage;
 	private boolean pageUpdated;
 	private boolean isLoggedIn;
+	private int gamesPlayed;
+	private String nameColor;
+	private String defaultColor;
 	
 	public User(Session session) {
 		this.id = Utils.generateKey();
@@ -34,6 +37,9 @@ public class User {
 		this.stage = "init";
 		this.pageUpdated = false;
 		this.isLoggedIn = false;
+		this.gamesPlayed = 0;
+		this.nameColor = "#000000";
+		this.defaultColor = "0000ff";
 		
 		// Set buffer size so we can actually send files
 		this.session.setMaxTextMessageBufferSize(524288);
@@ -52,6 +58,7 @@ public class User {
 	public int send(JSONObject message) {
 		message.put("id", this.getId());
 		message.put("name", this.getName());
+		message.put("nameColor", this.getNameColor());
 		message.put("stage", this.getStage());
 		message.put("isLoggedIn", this.isLoggedIn);
 		if (this.getGame() != null) {
@@ -123,12 +130,38 @@ public class User {
 		return true;
 	}
 	
+	public void logout() {
+		// TODO: Save user stats?
+		
+		if (this.getStage().equals("joinRoom"))
+			User.removeFromJoining(this);
+		
+		this.setStage("init");
+		this.setName(null);
+		this.isLoggedIn = false;
+		this.gamesPlayed = 0;
+		this.nameColor = "#000000";
+		this.defaultColor = "#0000ff";
+	}
+	
 	/**
 	 * Remove the user from the current game and go to main page
 	 */
 	public void leaveGame() {
 		this.getGame().removeUser(this);
 		this.setStage("init");
+	}
+	
+	public boolean save(JSONObject info) {
+		return DatabaseConnector.editUser(this, info);
+	}
+	
+	public String getInfo() {
+		JSONObject info = new JSONObject();
+		info.put("gamesPlayed", this.gamesPlayed);
+		info.put("defaultColor", this.defaultColor);
+		
+		return info.toString(); 
 	}
 	
 	public String getName() {
@@ -170,6 +203,26 @@ public class User {
 	
 	public boolean pageUpdated() {
 		return pageUpdated;
+	}
+	
+	public void addGamesPlayed(int games) {
+		this.gamesPlayed += games;
+	}
+	
+	public void setNameColor(String color) {
+		this.nameColor = color;
+	}
+	
+	public String getNameColor() {
+		return nameColor;
+	}
+	
+	public void setDefaultColor(String color) {
+		this.defaultColor = color;
+	}
+	
+	public String getDefaultColor() {
+		return defaultColor;
 	}
 	
 	public static void add(User u) {

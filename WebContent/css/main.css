@@ -163,6 +163,11 @@ th{
 	font-size: 30px;
 }
 
+.identifier span{
+	-webkit-text-stroke: 1px black;
+	letter-spacing: .15em;
+}
+
 .scribbleInput {
 	color: black;
 	border: none;

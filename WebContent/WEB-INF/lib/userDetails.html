@@ -1,0 +1,26 @@
+<div class="card">
+	<div class="identifier"></div>
+
+	<i id="back" class="fas fa-arrow-circle-left" onClick="sendMessage({type:'exit'})"></i>
+
+	<div style="width:800px;margin:auto;text-align:center;">
+		<h1>Your Details</h1>
+		<h2>You have played <span id="gameCount">0</span> games</h2>
+		<br/>
+	
+		<h1>Edit User</h1>
+		
+		<div style="width:200px;margin:auto;">
+			<input id="name" class="form-control btn-block scribbleInput" type="text" placeholder="Your Name">
+			<input id="password" class="form-control btn-block scribbleInput" type="password" placeholder="Change Password">
+			<input id="confirmPassword" class="form-control btn-block scribbleInput" type="password" placeholder="Confirm New Password">
+			<button type="button" id="nameColor" class="btn btn-block jscolor {valueElement:null, value:'0000ff', onFineChange: 'setNameColor(this)'}">Name Color</button>
+			<button type="button" id="brushColor" class="btn btn-block jscolor {valueElement:null, value:'0000ff', onFineChange: 'setColor(this)'}">Default Brush Color</button>
+			<br/>
+			<br/>
+			
+			<button type="button" class="btn btn-outline-secondary btn-block" onClick="saveUser();">Save</button>
+			<button type="button" class="btn btn-outline-secondary btn-block" onClick="sendMessage({type:'exit'})">Cancel</button>
+		</div>
+	</div>
+</div>

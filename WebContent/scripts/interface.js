@@ -88,6 +88,9 @@ function newCard(json){
 	// Init drawer if the canvas is present
 	if (document.getElementById("canvas") != null)
 		initDrawer();
+		
+	if (document.getElementsByClassName("jscolor") != null)
+		initJSColor();
 	
 	// Theme and animate if we need to swap cards
 	var cards = document.getElementsByClassName("card");
@@ -131,7 +134,20 @@ function populatePage(json, card){
 	if (sessionStorage["name"] !== "null" && document.getElementsByClassName("identifier") != null){
 		var ids = document.getElementsByClassName("identifier");
 		
-		ids[ids.length - 1].innerHTML = sessionStorage["name"];
+		if (json.stage == "init" || json.stage == "createRoomForm" || json.stage == "joinRoom"){
+			ids[ids.length - 1].innerHTML = "<div class=\"dropdown\">" + 
+												"<a class=\"btn btn-secondary dropdown-toggle\" href=\"#\" id=\"idDropdown\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">" +
+													"<span>" + sessionStorage["name"] + "</span>" +
+												"</a>" + 
+												"<div class=\"dropdown-menu\" aria-labelledby=\"idDropdown\">" +
+													"<a class=\"dropdown-item\" href=\"#\" onClick=\"sendMessage({'type': 'editUser'})\">" + "Edit User" + "</a>" +
+													"<a class=\"dropdown-item\" href=\"#\" onClick=\"sendMessage({'type': 'logout'})\">" + "Logout" + "</a>" +
+												"</div>" +
+											"</div>";
+		} else {
+			ids[ids.length - 1].innerHTML = "<span>" + sessionStorage["name"] + "</span>";
+		}
+		$(ids[ids.length - 1]).find("span").css({"color": json.nameColor});
 	}
 	
 	if (json.users != null)
@@ -139,6 +155,20 @@ function populatePage(json, card){
 		
 	if (json.games != null)
 		updateGameList(JSON.parse(json.games));
+		
+	if (json.isLoggedIn && document.getElementById("username") != null){
+		$("#username").remove();
+	}
+	
+	if (json.stage == "editUser"){
+		document.getElementById("name").value = json.name;
+		$("#nameColor").css({"background-color": json.nameColor});
+		$("#brushColor").css({"background-color": JSON.parse(json.info).defaultColor});
+		document.getElementById("gameCount").innerHTML = JSON.parse(json.info).gamesPlayed;
+		
+		newNameColor = "";
+		color = "";
+	}
 }
 
 /**
@@ -213,15 +243,22 @@ function theme(card){
 		"background-color": "transparent"
 	});
 	
+	var background;
+	var color;
 	$(card).find(".btn").hover(function(){
+		if (this.style.background-color != inverse){
+			background = this.style.backgroundColor;
+			color = this.style.color;
+		}
+	
 		$(this).css({
 			"color": "white",
 			"background-color": inverse
 		});
 	}, function(){
 		$(this).css({
-			"color": inverse,
-			"background-color": "transparent"
+			"color": color,
+			"background-color": background
 		});
 	});
 }
@@ -364,10 +401,11 @@ function updateUsers(json){
 		var names = sessionStorage["name"];
 		
 		for (var i = 0; i < users.length; i++){
-			if (users[i] === sessionStorage["name"])
+			var userDetails = users[i].split(";");
+			if (userDetails[0] === sessionStorage["name"])
 				continue;
 		
-			names += "<br/>" + users[i];
+			names += "<br/>" + "<span style=\"color:" + userDetails[1] + ";\">" + userDetails[0] + "</span>";
 		}
 		
 		if (names.length != 0)
@@ -411,4 +449,10 @@ function updateGameList(list){
 		selectedGame = $(this).attr("value");
 		$(this).css({"background-color": complement});
 	});
+}
+
+function setNameColor(color){
+	$(".identifier").css({"color": "#" + color});
+	
+	newNameColor = "#" + color;
 }

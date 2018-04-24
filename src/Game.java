@@ -253,7 +253,7 @@ public class Game {
 		String ret = "[";
 		
 		for (User u : users) {
-			ret += "\"" + u.getName() + "\",";
+			ret += "\"" + u.getName() + ";" + u.getNameColor() + "\",";
 		}
 		
 		ret = ret.substring(0, ret.length() - 1);

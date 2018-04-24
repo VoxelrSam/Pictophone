@@ -33,8 +33,15 @@ public class Utils {
 		case "init":
 			fileName = "start.html";
 			break;
+		case "rules":
+			fileName = "rules.html";
+			break;
 		case "login":
 			fileName = "login.html";
+			break;
+		case "editUser":
+			fileName = "userDetails.html";
+			response.put("info", user.getInfo());
 			break;
 		case "createRoomForm":
 			fileName = "createRoom.html";
