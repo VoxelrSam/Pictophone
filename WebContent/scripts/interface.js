@@ -452,7 +452,7 @@ function updateGameList(list){
 }
 
 function setNameColor(color){
-	$(".identifier").css({"color": "#" + color});
+	$(".identifier span").css({"color": "#" + color});
 	
 	newNameColor = "#" + color;
 }
