@@ -178,14 +178,17 @@ function buildTimeline(timeline, users){
 	var div = document.getElementById("timeline");
 
 	for (var i = 0; i < timeline.length; i++){
+		var userDetails = users[i].split(";");
+		var name = "<span style=\"color:" + userDetails[1] + ";\">" + userDetails[0] + "</span>";
+		
 		if (i % 2 == 0){
 			div.innerHTML +=
-				"<h2>" + users[i] + " said</h2>" +
+				"<h2>" + name + " said</h2>" +
 				"<h3>\"" + timeline[i] + "\"</h3>" 
 				"<br/>";
 		} else {
 			div.innerHTML +=
-				"<h2>" + users[i] + " drew</h2>" +
+				"<h2>" + name + " drew</h2>" +
 				"<img class=\"drawing\" src=\"" + timeline[i] + "\"/>" +
 				"<br/>";
 		}
@@ -398,7 +401,7 @@ function updateUsers(json){
 	if (document.getElementsByClassName("identifier") != null){
 		var ids = document.getElementsByClassName("identifier");
 		
-		var names = sessionStorage["name"];
+		var names = "<span style=\"color:" + sessionStorage["nameColor"] + ";\">" + sessionStorage["name"] + "</span>";
 		
 		for (var i = 0; i < users.length; i++){
 			var userDetails = users[i].split(";");

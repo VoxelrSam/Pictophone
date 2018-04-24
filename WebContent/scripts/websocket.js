@@ -67,6 +67,7 @@ function onMessage(message){
 	// Store User data in sessionStorage
 	sessionStorage["id"] = json.id;
 	sessionStorage["name"] = json.name;
+	sessionStorage["nameColor"] = json.nameColor;
 	sessionStorage["gameKey"] = json.gameKey;
 	
 	console.log("Message received from server :");
