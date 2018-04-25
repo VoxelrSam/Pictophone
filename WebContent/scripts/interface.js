@@ -1,5 +1,7 @@
 /**
  * Used for all the general functions that make the page dynamic and interactive
+ * 
+ * @author Samuel Ingram
  */
 
 /** 
@@ -49,6 +51,17 @@ var selectedGame;
 // Keeps track of the complement color for the current scheme
 var complement;
 
+// Keeps track of if the web page is in focus
+var isInFocus = true;
+
+window.onblur = function(){
+	isInFocus = false;
+}
+
+window.onfocus = function(){
+	isInFocus = true;
+}
+
 /**
  * Displays a little notification in the corner
  *
@@ -80,6 +93,8 @@ function notify(type, message){
 /**
  * Handles a new card being sent in by the server
  * Fills in the proper info, themes it, and then animates it in
+ * 
+ * @param json The json message that contains the new card
  */
 function newCard(json){
 	// Insert Card
@@ -114,6 +129,9 @@ function newCard(json){
 
 /**
  * Fills in the info on the page given by the server
+ * 
+ * @param json The json message that was sent that probably contains info to populate the page with
+ * @param card The card to populate
  */
 function populatePage(json, card){
 	if (json.key != null && $(card).find("#key")[0] != null)
@@ -134,7 +152,7 @@ function populatePage(json, card){
 	if (sessionStorage["name"] !== "null" && document.getElementsByClassName("identifier") != null){
 		var ids = document.getElementsByClassName("identifier");
 		
-		if (json.stage == "init" || json.stage == "createRoomForm" || json.stage == "joinRoom"){
+		if ((json.stage == "init" || json.stage == "createRoomForm" || json.stage == "joinRoom") && json.isLoggedIn){
 			ids[ids.length - 1].innerHTML = "<div class=\"dropdown\">" + 
 												"<a class=\"btn btn-secondary dropdown-toggle\" href=\"#\" id=\"idDropdown\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">" +
 													"<span>" + sessionStorage["name"] + "</span>" +
@@ -145,7 +163,8 @@ function populatePage(json, card){
 												"</div>" +
 											"</div>";
 		} else {
-			ids[ids.length - 1].innerHTML = "<span>" + sessionStorage["name"] + "</span>";
+			if (!(json.stage == "init" || json.stage == "createRoomForm" || json.stage == "joinRoom"))
+				ids[ids.length - 1].innerHTML = "<span>" + sessionStorage["name"] + "</span>";
 		}
 		$(ids[ids.length - 1]).find("span").css({"color": json.nameColor});
 	}
@@ -158,6 +177,10 @@ function populatePage(json, card){
 		
 	if (json.isLoggedIn && document.getElementById("username") != null){
 		$("#username").remove();
+	}
+	
+	if (!json.isLoggedIn && document.getElementById("username") != null && sessionStorage["name"] != "null"){
+		document.getElementById("username").value = sessionStorage["name"];
 	}
 	
 	if (json.stage == "editUser"){
@@ -173,6 +196,9 @@ function populatePage(json, card){
 
 /**
  * Build out the representation for the timeline (Used at game end)
+ * 
+ * @param timeline The array of strings representing the timeline
+ * @param users The names of the users in the order that they responded
  */
 function buildTimeline(timeline, users){
 	var div = document.getElementById("timeline");
@@ -200,6 +226,8 @@ function buildTimeline(timeline, users){
 
 /**
  * Gives a psuedo-random theme to each card passed in
+ * 
+ * @param card The card to theme
  */
 function theme(card){
 	var css;
@@ -212,8 +240,8 @@ function theme(card){
 	
 	switch (themeNumber){
 		case 0:
-			css = {background:"Seashell",color:"black"};
-			complement = "#edf8ff";
+			css = {background:"#ffddd3",color:"black"};
+			complement = "#d3fffb";
 			break;
 		case 1:
 			css = {background:"palegreen",color:"black"};
@@ -268,6 +296,9 @@ function theme(card){
 
 /**
  * Get the opposite color of the one passed in
+ * 
+ * @param color The color to get the inverse of
+ * @return The inverse hex color
  */
 function getInverse(color){
 	var r = (255 - color.slice(4, 7)).toString(16);
@@ -287,8 +318,15 @@ function getInverse(color){
 /**
  * Transitions two cards
  * The old one is deleted at the end
+ * 
+ * @param cards The two cards to transition
  */
 function transitionCards(cards){
+	if (!isInFocus){
+		$(cards[0]).remove();
+		return;
+	}
+
 	// Pick a random animation
 	var animation = Math.floor(Math.random() * 8);
 	
@@ -346,6 +384,8 @@ function transitionCards(cards){
 
 /**
  * Start the timer on the interface
+ * 
+ * @param seconds The duration with which to set the timer
  */
 function startTimer(seconds){
 	document.getElementById("timer").innerHTML = seconds;
@@ -390,6 +430,8 @@ function tick(){
 
 /**
  * Update the user list/count
+ * 
+ * @param json An array full of users
  */
 function updateUsers(json){
 	var users = JSON.parse(json.users);
@@ -418,6 +460,8 @@ function updateUsers(json){
 
 /**
  * Update the game list/count
+ * 
+ * @param list The game list to use
  */
 function updateGameList(list){
 	if (document.getElementById("gamesList") == null)
@@ -454,6 +498,11 @@ function updateGameList(list){
 	});
 }
 
+/**
+ * Sets the name color for user editing
+ * 
+ * @param color The color to set to
+ */
 function setNameColor(color){
 	$(".identifier span").css({"color": "#" + color});
 	

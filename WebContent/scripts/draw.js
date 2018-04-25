@@ -1,3 +1,9 @@
+/**
+ * Used for drawing capabilities
+ * 
+ * @author Samuel Ingram
+ */
+
 // Drawing script adapted from William Mallone's tutorial
 // http://www.williammalone.com/articles/create-html5-canvas-javascript-drawing-app/#demo-complete
 
@@ -21,6 +27,7 @@ function initDrawer(){
 		$(this).css({"background": "lightgrey"});
 		$("#eraser").css({"background": "white"});
 	});
+	
 	$("#marker").css({"background": "lightgrey"});
 	
 	$("#eraser").click(function(){
@@ -78,11 +85,17 @@ function initDrawer(){
 
 /**
  * Record a draw point
+ * 
+ * @param x The x coordinate of the point
+ * @param y The y coordinate of the point
+ * @param draggin A boolean indicating whether or not the mouse is being dragged
  */
 function addClick(x, y, dragging){
 	clickX.push(x);
 	clickY.push(y);
 	clickDrag.push(dragging);
+	
+	// Just record a white point if the eraser is being used
 	if (!eraser)
 		clickColor.push(color);
 	else 
@@ -159,6 +172,9 @@ function setEraser(value){
 	eraser = value;
 }
 
+/**
+ * Initializes the jscolor code. Useful when elements are dynamically inserted
+ */
 function initJSColor(){
 	jscolor.installByClassName('jscolor');
 }

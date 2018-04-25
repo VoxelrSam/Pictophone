@@ -33,8 +33,6 @@ public class RequestHandler {
 		
 		// Check if id was given yet
 		if (request.get("id") == null || User.getUsers().get(request.get("id")) == null) {
-			// TODO: Notification for unauthorized user
-			
 			// New user connected
 			user = new User(session);
 		} else {

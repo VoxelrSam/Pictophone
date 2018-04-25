@@ -1,5 +1,7 @@
 /**
  * Used for communicating to the server
+ * 
+ * @author Samuel Ingram
  */
 
 // WebSocket to be used
@@ -27,6 +29,8 @@ function connect(){
 
 /**
  * When a connection is opened
+ * 
+ * @param message The message that is received. Can be used, but is not being used....
  */
 function onOpen(message){
 	console.log("Connected ... \n");
@@ -54,11 +58,12 @@ function sendMessage(message){
  */
 function closeConnection(){
 	webSocket.close();
-	console.log("We closed it");
 }
 
 /**
  * Handle incoming messages from the server
+ * 
+ * @param message A JSON message from the server to be handled by the client
  */
 function onMessage(message){
 	// Parse message into JSON object
@@ -70,7 +75,7 @@ function onMessage(message){
 	sessionStorage["nameColor"] = json.nameColor;
 	sessionStorage["gameKey"] = json.gameKey;
 	
-	console.log("Message received from server :");
+	console.log("Message received from server:");
 	console.log(json);
 	
 	// Handle message type
@@ -94,6 +99,8 @@ function onMessage(message){
 
 /**
  * When the connection is closed
+ * 
+ * @param message The message that is received. Can be used, but is not being used....
  */
 function onClose(message){
 	console.log(message);
@@ -102,9 +109,11 @@ function onClose(message){
 
 /**
  * When an error occurs with the socket
+ * 
+ * @param message The message that is received. Can be used, but is not being used....
  */
 function onError(message){
-	console.log("Error ... \n");
+	console.log("Error... \n");
 }
 
 /**

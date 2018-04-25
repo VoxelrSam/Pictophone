@@ -1,5 +1,7 @@
 /**
  * Used for validating and submitting forms
+ * 
+ * @author Samuel Ingram
  */
  
  var newNameColor;
@@ -22,6 +24,11 @@ function createRoom(){
 	
 	if (message.username.length == 0){
 		notify("warning", "Please specify a username");
+		return;
+	}
+	
+	if (message.username.length > 16){
+		notify("warning", "Please keep usernames under 16 characters in length");
 		return;
 	}
 	
@@ -54,6 +61,11 @@ function joinPublicRoom(){
 		message.username = document.getElementById("username").value;
 	else
 		message.username = sessionStorage["name"];
+		
+	if (message.username.length > 16){
+		notify("warning", "Please keep usernames under 16 characters in length");
+		return;
+	}
 	
 	if (selectedGame == null){
 		notify("warning", "Please pick a game first");
@@ -78,11 +90,15 @@ function joinPrivateRoom(){
 	message.type = "joinRoom";
 	message.roomkey = document.getElementById("roomkey").value;
 	
-	
 	if (document.getElementById("username") != null)
 		message.username = document.getElementById("username").value;
 	else
 		message.username = sessionStorage["name"];
+		
+	if (message.username.length > 16){
+		notify("warning", "Please keep usernames under 16 characters in length");
+		return;
+	}
 	
 	if (message.username.length == 0){
 		notify("warning", "Please specify a username");

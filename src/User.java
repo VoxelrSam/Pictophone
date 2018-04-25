@@ -131,8 +131,6 @@ public class User {
 	}
 	
 	public void logout() {
-		// TODO: Save user stats?
-		
 		if (this.getStage().equals("joinRoom"))
 			User.removeFromJoining(this);
 		
@@ -205,8 +203,16 @@ public class User {
 		return pageUpdated;
 	}
 	
+	public boolean isLoggedIn() {
+		return isLoggedIn;
+	}
+	
 	public void addGamesPlayed(int games) {
 		this.gamesPlayed += games;
+	}
+	
+	public int getGamesPlayed() {
+		return gamesPlayed;
 	}
 	
 	public void setNameColor(String color) {

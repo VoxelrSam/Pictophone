@@ -120,11 +120,12 @@ public class DatabaseConnector {
 				return 2;
 			}
 			
-			// TODO: Prevent SQL Injection
 			// Insert the new user
-			Statement setup = conn.createStatement();
-			setup.addBatch("INSERT INTO users (username, password) VALUES ('" + name + "', '" + pass + "')");
-			setup.executeBatch();
+			String command = "INSERT INTO users (username, password) VALUES (?, ?)";
+			PreparedStatement setup = conn.prepareStatement(command);
+			setup.setString(1, name);
+			setup.setString(2, pass);
+			setup.execute();
 			setup.close();
 			
 		} catch (SQLException ex) {
@@ -276,6 +277,29 @@ public class DatabaseConnector {
 		}
 		
 		return true;
+	}
+	
+	public static void updateGamesPlayed(User user) {
+		Connection conn = null;
+		PreparedStatement setup = null;
+		try {
+			conn = getRemoteConnection();
+			
+			String command = "UPDATE users SET games_played = ? WHERE username = ?";
+			setup = conn.prepareStatement(command);
+			setup.setInt(1, user.getGamesPlayed());
+			setup.setString(2, user.getName());
+			
+			setup.executeUpdate();
+		} catch (SQLException ex) {
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+		} finally {
+			System.out.println("Closing the connection.");
+			if (conn != null) try { conn.close(); } catch (SQLException ignore) {}
+			if (setup != null) try { setup.close(); } catch (SQLException ignore) {}
+		}
 	}
 	
 	private static boolean userExists(String username) {

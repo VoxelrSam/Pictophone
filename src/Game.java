@@ -91,6 +91,10 @@ public class Game {
 		for (int i = 0; i < users.size(); i++) {
 			users.get(i).setStage("end");
 			users.get(i).setPageUpdated(true);
+			users.get(i).addGamesPlayed(1);
+			
+			if (users.get(i).isLoggedIn())
+				DatabaseConnector.updateGamesPlayed(users.get(i));
 		}
 		
 		pushPages();
@@ -230,7 +234,9 @@ public class Game {
 			endMessage.put("type", "killGame");
 			sendToAll(endMessage);
 			
-			for (User user : users) {
+			User user;
+			while (!users.isEmpty()) {
+				user = users.get(0);
 				user.leaveGame();
 			}
 			
