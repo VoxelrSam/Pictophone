@@ -29,7 +29,6 @@ public class Handler {
 	 
 	@OnMessage
 	public void onMessage(String message, Session session) {
-		System.out.println("\n--------------------\n" + message);
 		RequestHandler.handleRequest(message, session);
 	}
 	 

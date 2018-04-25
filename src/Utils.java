@@ -184,9 +184,13 @@ public class Utils {
 			fullPath = null;
 		}
 		
-		fullPath = fullPath.split("classes/")[0];
-		fullPath = fullPath.substring(1, fullPath.length()).replace("/", "\\");
+		if (System.getProperty("RDS_HOSTNAME") == null) {
+			fullPath = fullPath.split("classes/")[0];
+			fullPath = fullPath.substring(1, fullPath.length()).replace("/", "\\");
+		} else {
+			fullPath = fullPath.split("classes/")[0];
+		}
 		
-		return fullPath + "lib\\" + file;
+		return fullPath + "lib/" + file;
 	}
 }

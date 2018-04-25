@@ -17,7 +17,12 @@ function connect(){
 	} else {
 		url = "ws://";
 	}
-	url += window.location.host + "/Pictophone/socketHandler";
+	
+	// The url will be different on AWS
+	if (window.location.hostname.indexOf("localhost") == -1)
+		url += window.location.hostname + "/socketHandler";
+	else 
+		url += window.location.hostname + ":8080/Pictophone/socketHandler";
 	
 	webSocket = new WebSocket(url);
 
@@ -25,6 +30,8 @@ function connect(){
 	webSocket.onmessage = function(message){ onMessage(message)};
 	webSocket.onclose = function(message){ onClose(message)};
 	webSocket.onerror = function(message){ onError(message);};
+	
+	window.setInterval(function(){sendMessage({"type": "ping"})}, 10000);
 }
 
 /**
@@ -49,8 +56,6 @@ function sendMessage(message){
 	message.gameKey = sessionStorage["gameKey"];
 	
 	webSocket.send(JSON.stringify(message));
-	console.log("Message sent to server:");
-	console.log(message);
 }
 
 /**
@@ -69,14 +74,14 @@ function onMessage(message){
 	// Parse message into JSON object
 	var json = JSON.parse(message.data);
 	
+	if (json.type == "pong")
+		return;
+	
 	// Store User data in sessionStorage
 	sessionStorage["id"] = json.id;
 	sessionStorage["name"] = json.name;
 	sessionStorage["nameColor"] = json.nameColor;
 	sessionStorage["gameKey"] = json.gameKey;
-	
-	console.log("Message received from server:");
-	console.log(json);
 	
 	// Handle message type
 	switch (json.type){

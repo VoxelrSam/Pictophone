@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 import javax.websocket.Session;
 
 import org.json.simple.JSONObject;
@@ -27,6 +29,16 @@ public class RequestHandler {
 			System.out.println("Failed to parse message: " + message);
 			e.printStackTrace();
 			return 1;
+		}
+		
+		if (request.get("type").equals("ping")) {
+			try {
+				session.getBasicRemote().sendText("{\"type\": \"pong\"}");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			return 0;
 		}
 		
 		User user;
