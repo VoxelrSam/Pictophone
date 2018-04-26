@@ -25,4 +25,4 @@ As for hosting, the project currently uses [AWS Elastic Beanstalk](https://aws.a
 
 ---
 
-*\~\~Made with love and frustration by [Samuel Ingram](samingram.me)\~\~*
+*\~\~Made with love and frustration by [Samuel Ingram](http://samingram.me/)\~\~*

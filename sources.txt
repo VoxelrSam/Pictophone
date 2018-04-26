@@ -1,15 +1,24 @@
 Sources:
 
+Bootstrap
+https://getbootstrap.com/
+
+Popper.js
+https://popper.js.org/
+
+Animate.css
+https://daneden.github.io/animate.css/
+
 JuneGloom font
 http://www.fontspace.com/des/junegloom
 
-icons
+Font Awesome Icons
 https://fontawesome.com/
 
-paterns
+funky-lines pattern
 https://www.toptal.com/designers/subtlepatterns/
 
-Vanilla Extract
+Vanilla Extract font
 https://www.1001freefonts.com/vanilla-extract.font
 
 MySQL Connector
