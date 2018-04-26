@@ -1,16 +1,19 @@
 Sources:
 
+JQuery
+https://jquery.com/
+
 Bootstrap
 https://getbootstrap.com/
 
 Popper.js
 https://popper.js.org/
 
+jscolor
+http://jscolor.com/
+
 Animate.css
 https://daneden.github.io/animate.css/
-
-JuneGloom font
-http://www.fontspace.com/des/junegloom
 
 Font Awesome Icons
 https://fontawesome.com/
@@ -18,11 +21,20 @@ https://fontawesome.com/
 funky-lines pattern
 https://www.toptal.com/designers/subtlepatterns/
 
+JuneGloom font
+http://www.fontspace.com/des/junegloom
+
 Vanilla Extract font
 https://www.1001freefonts.com/vanilla-extract.font
+
+Tomcat
+https://tomcat.apache.org/
+
+org.json
+https://github.com/stleary/JSON-java
 
 MySQL Connector
 https://dev.mysql.com/downloads/connector/j/
 
-BCrypt
+jBCrypt
 http://www.mindrot.org/projects/jBCrypt/
