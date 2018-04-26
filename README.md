@@ -17,7 +17,7 @@ The cycle then repeats through stages 2 and 3 until all of the users have contri
 ### Technology
 For the front end, the usual culprits of HTML, CSS, and JavaScript are utilized alongside [JQuery](https://jquery.com/). [Bootstrap](https://getbootstrap.com/) handles much of the base layer styling, [Animate.css](https://daneden.github.io/animate.css/) is used for all of the animation work, [jscolor](http://jscolor.com/) is used for color picking, and [Font Awesome](https://fontawesome.com/) is used for all the various icons.
 
-This project makes use of [Apache Tomcat](https://tomcat.apache.org/) for the backend, so the server is written completely in Java. As far as communication goes between the client and server, JSON is sent via WebSockets that is then parsed and handled appropriately. Jars included are [org.json](https://github.com/stleary/JSON-java) and the [MySQL Connector/J driver](https://dev.mysql.com/downloads/connector/j/5.1.html).
+This project makes use of [Apache Tomcat](https://tomcat.apache.org/) for the backend, so the server is written completely in Java. As far as communication goes between the client and server, JSON is sent via WebSockets that is then parsed and handled appropriately. Jars included are [org.json](https://github.com/stleary/JSON-java), the [MySQL Connector/J driver](https://dev.mysql.com/downloads/connector/j/5.1.html), and [jBCrypt](http://www.mindrot.org/projects/jBCrypt/) for password hashing.
 
 As for hosting, the project currently uses [AWS Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/), and the MySQL server is an [AWS RDS](https://aws.amazon.com/rds/) instance.
 
