@@ -159,8 +159,13 @@ th{
 	position: fixed;
 	top: 30px;
 	right: 30px;
+	padding-left: 3px;
 	font-family: VanillaExtract;
 	font-size: 30px;
+	max-width:17%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .identifier span{
@@ -185,7 +190,7 @@ th{
 
 .drawing{
 	background: white;
-	width: 1000px;
+	width: 95%;
 	margin: auto;
 	border: 5px solid grey;
 	border-radius: 20px;

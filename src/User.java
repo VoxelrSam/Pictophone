@@ -45,7 +45,7 @@ public class User {
 		this.defaultColor = "0000ff";
 		
 		// Set buffer size so we can actually send files
-		this.session.setMaxTextMessageBufferSize(524288);
+		this.session.setMaxTextMessageBufferSize(1048576);
 		
 		sessionIdsToUsers.put(session.getId(), this);
 		User.add(this);

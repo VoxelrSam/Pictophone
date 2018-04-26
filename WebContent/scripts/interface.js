@@ -163,7 +163,7 @@ function populatePage(json, card){
 												"</div>" +
 											"</div>";
 		} else {
-			if (!(json.stage == "init" || json.stage == "createRoomForm" || json.stage == "joinRoom" || json.stage == "editUser"))
+			if (!(json.stage == "init" || json.stage == "createRoomForm" || json.stage == "joinRoom" || json.stage == "login"))
 				ids[ids.length - 1].innerHTML = "<span>" + sessionStorage["name"] + "</span>";
 		}
 		$(ids[ids.length - 1]).find("span").css({"color": json.nameColor});
@@ -191,6 +191,14 @@ function populatePage(json, card){
 		
 		newNameColor = "";
 		color = "";
+	}
+	
+	if (document.getElementById("promptInput") != null){
+		$("#promptInput").keydown(function(e){
+			if (e.keyCode == 13 && !e.shiftKey){
+				e.preventDefault();
+			}
+		});
 	}
 }
 

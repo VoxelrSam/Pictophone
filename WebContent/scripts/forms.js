@@ -130,6 +130,12 @@ function submitDrawing(){
 	message.type = "submitDrawing";
 	message.image = canvas.toDataURL('image/png');
 	
+	context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+	clickX = new Array();
+	clickY = new Array();
+	clickDrag = new Array();
+	clickColor = new Array();
+	
 	window.clearInterval(timer);
 	
 	sendMessage(message);
