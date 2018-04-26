@@ -4,6 +4,7 @@
  * @author Samuel Ingram
  */
  
+// Used for keeping track of the new name color chosen in the user edit page
  var newNameColor;
 
 /**

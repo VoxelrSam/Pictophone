@@ -18,7 +18,14 @@
 			<button type="button" id="brushColor" class="btn btn-block jscolor {valueElement:null, value:'0000ff', onFineChange: 'setColor(this)'}">Default Brush Color</button>
 			<br/>
 			<br/>
+		</div>
+		
+		<div class="alert alert-danger" role="alert" style="outline: 2px solid black;">
+			Warning - While this site does hash passwords on the server, it currently does not implement HTTPS. It is advised that you use a dummy password that you use nowhere else.
+		</div>
+		<br/>
 			
+		<div style="width:200px;margin:auto;">
 			<button type="button" class="btn btn-outline-secondary btn-block" onClick="saveUser();">Save</button>
 			<button type="button" class="btn btn-outline-secondary btn-block" onClick="sendMessage({type:'exit'})">Cancel</button>
 		</div>

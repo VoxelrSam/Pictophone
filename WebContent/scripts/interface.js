@@ -73,7 +73,7 @@ function notify(type, message){
 	
 	// Insert the notification
 	document.getElementById("alertFrame").innerHTML +=
-		"<div class=\"alert alert-" + type + "\" role=alert id=\"" + id + "\">" +
+		"<div class=\"alert alert-" + type + "\" role='alert' id=\"" + id + "\">" +
 			message + 
 			"<button type='button' class='close' data-dismiss='alert' aria-label='Close'>" +
 				"<span aria-hidden='true'>&times;</span>" +

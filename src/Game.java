@@ -88,6 +88,7 @@ public class Game {
 	private void end() {
 		this.stage = "end";
 		
+		// Update each user's info
 		for (int i = 0; i < users.size(); i++) {
 			users.get(i).setStage("end");
 			users.get(i).setPageUpdated(true);
@@ -97,6 +98,7 @@ public class Game {
 				DatabaseConnector.updateGamesPlayed(users.get(i));
 		}
 		
+		// Send the ending pages
 		pushPages();
 	}
 	
@@ -181,6 +183,9 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Send an update of the user list to all the users in the game
+	 */
 	public void sendUsersUpdate() {
 		JSONObject message = new JSONObject();
 		message.put("type", "usersUpdate");
@@ -215,9 +220,17 @@ public class Game {
 		return 0;
 	}
 	
-	public void removeUser(User u) {
-		users.remove(u);
-		u.setGame(null);
+	/**
+	 * Remove the specified user from the game
+	 * 
+	 * @param u The user to remove
+	 */
+	public void removeUser(User user) {
+		users.remove(user);
+		user.setGame(null);
+		
+		if (this.owner.equals(user))
+			owner = null;
 		
 		// Kill the game if we lose too many
 		if (users.size() < 3 && !booting) {
@@ -225,6 +238,9 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Forcibly kill this game and boot all users
+	 */
 	public void killGame() {
 		// Boot everyone out and remove the game
 		if (!booting) {
@@ -234,6 +250,7 @@ public class Game {
 			endMessage.put("type", "killGame");
 			sendToAll(endMessage);
 			
+			// Make each user leave
 			User user;
 			while (!users.isEmpty()) {
 				user = users.get(0);
@@ -318,6 +335,9 @@ public class Game {
 		return games.get(key);
 	}
 	
+	/**
+	 * Push an updated list of public games to all the users trying to join
+	 */
 	public static void pushGamesListUpdate() {
 		JSONObject games = new JSONObject();
 		games.put("games", Game.getPublicGames());
@@ -330,6 +350,11 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Get a String representing an array of all the public games
+	 * 
+	 * @return A String of games
+	 */
 	public static String getPublicGames() {
 		String ret = "[";
 		

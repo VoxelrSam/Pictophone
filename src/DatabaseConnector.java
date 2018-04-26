@@ -3,7 +3,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -207,6 +206,13 @@ public class DatabaseConnector {
 		return 0;
 	}
 	
+	/**
+	 * Edits the user info in the database based on the info passed in
+	 * 
+	 * @param user The user to edit
+	 * @param info The info to set to
+	 * @return true if successful
+	 */
 	public static boolean editUser(User user, JSONObject info) {
 		String prevName = user.getName();
 		if (info.get("username") != null) {
@@ -217,12 +223,27 @@ public class DatabaseConnector {
 				return false;
 			}
 			
+			if (((String) info.get("username")).length() == 0){
+				user.warn("Please specify a username");
+				return false;
+			}
+			
+			if (((String) info.get("username")).length() > 16){
+				user.warn("Please keep usernames under 16 characters in length");
+				return false;
+			}
+			
 			user.setName((String) info.get("username"));
 		}
 		
 		String password = null;
 		if (info.get("password") != null) {
 			password = (String) info.get("password");
+			
+			if (password.length() == 0){
+				user.warn("Please specify a password");
+				return false;
+			}
 			
 			// hash password
 			password = BCrypt.hashpw(password, BCrypt.gensalt());
@@ -279,6 +300,11 @@ public class DatabaseConnector {
 		return true;
 	}
 	
+	/**
+	 * Updates the number of games that a user has played in the database
+	 * 
+	 * @param user The user to update
+	 */
 	public static void updateGamesPlayed(User user) {
 		Connection conn = null;
 		PreparedStatement setup = null;
@@ -302,6 +328,12 @@ public class DatabaseConnector {
 		}
 	}
 	
+	/**
+	 * Checks if the specified username exists in the database
+	 * 
+	 * @param username The username to check
+	 * @return true if the username exists
+	 */
 	private static boolean userExists(String username) {
 		Connection conn = getRemoteConnection();
 		String query = "SELECT * FROM users WHERE username = ?";

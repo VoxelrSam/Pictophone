@@ -52,6 +52,12 @@ public class RequestHandler {
 			user.setSession(session);
 		}
 		
+		// Stop the UserDestroyer if necessary
+		if (user.getDestroyer() != null) {
+			user.getDestroyer().interrupt();
+			user.setDestroyer(null);
+		}
+		
 		// If game id is specified, send request to game request handler
 		Game g;
 		if (request.get("gameKey") != null 
@@ -108,6 +114,12 @@ public class RequestHandler {
 			if (user.getStage() != "createRoomForm")
 				return 1;
 			
+			if (((String) request.get("username")).length() == 0) {
+				user.warn("Please specify a username");
+			} else if (((String) request.get("username")).length() > 16) {
+				user.warn("Please keep usernames under 16 characters in length");
+			}
+			
 			user.setName((String) request.get("username"));
 			boolean isPublic = ((String) request.get("roomtype")).equals("Public");
 			new Game(user, (String) request.get("roomname"), Integer.parseInt((String) request.get("roomsize")), isPublic);
@@ -131,6 +143,12 @@ public class RequestHandler {
 				// Game does not exist
 				user.warn("Room not found with that key. Try another.");
 				return 1;
+			}
+			
+			if (((String) request.get("username")).length() == 0) {
+				user.warn("Please specify a username");
+			} else if (((String) request.get("username")).length() > 16) {
+				user.warn("Please keep usernames under 16 characters in length");
 			}
 			
 			user.setName((String) request.get("username"));

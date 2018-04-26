@@ -17,6 +17,7 @@ public class User {
 	 * HashMap of User id's to User objects to keep track of all clients
 	 */
 	private static HashMap<String, User> users = new HashMap<String, User>();
+	private static HashMap<String, User> sessionIdsToUsers = new HashMap<String, User>();
 	
 	private static ArrayList<User> joiningUsers = new ArrayList<>();
 	
@@ -31,6 +32,8 @@ public class User {
 	private String nameColor;
 	private String defaultColor;
 	
+	private Thread destroyer;
+	
 	public User(Session session) {
 		this.id = Utils.generateKey();
 		this.session = session;
@@ -44,6 +47,7 @@ public class User {
 		// Set buffer size so we can actually send files
 		this.session.setMaxTextMessageBufferSize(524288);
 		
+		sessionIdsToUsers.put(session.getId(), this);
 		User.add(this);
 		
 		System.out.println("User generated with id " + this.id);
@@ -69,7 +73,7 @@ public class User {
 		try {
 			session.getBasicRemote().sendText(message.toString());
 		} catch (Exception e) {
-			User.remove(this.getId());
+			User.remove(this);
 			e.printStackTrace();
 			
 			return 1;
@@ -98,7 +102,20 @@ public class User {
 	 * @return true if successful, false if not
 	 */
 	public boolean signup(String name, String pass) {
-		// TODO: add server side form validation (i.e. name must be less than 16 characters)
+		if (name.length() == 0){
+			warn("Please specify a username");
+			return false;
+		}
+		
+		if (name.length() > 16){
+			warn("Please keep usernames under 16 characters in length");
+			return false;
+		}
+		
+		if (pass.length() == 0){
+			warn("Please specify a password");
+			return false;
+		}
 		
 		if (DatabaseConnector.addUser(this, name, pass) != 0) {
 			return false;
@@ -130,6 +147,9 @@ public class User {
 		return true;
 	}
 	
+	/**
+	 * Logs out a user and sets all the parameters to the default
+	 */
 	public void logout() {
 		if (this.getStage().equals("joinRoom"))
 			User.removeFromJoining(this);
@@ -143,6 +163,21 @@ public class User {
 	}
 	
 	/**
+	 * Remove all references to this object so that it will be picked up by garbage collection
+	 */
+	public void destroy() {
+		User.remove(this);
+		
+		if (this.currentGame != null)
+			this.getGame().removeUser(this);
+		
+		if (joiningUsers.contains(this))
+			joiningUsers.remove(this);
+		
+		System.out.println("Destroyed user " + this.getId());
+	}
+	
+	/**
 	 * Remove the user from the current game and go to main page
 	 */
 	public void leaveGame() {
@@ -150,10 +185,21 @@ public class User {
 		this.setStage("init");
 	}
 	
+	/**
+	 * Save the user to the database. Essentially an abstraction to the DatabaseConnector method.
+	 * 
+	 * @param info A JSONObject representing the info to be saved
+	 * @return true if successful
+	 */
 	public boolean save(JSONObject info) {
 		return DatabaseConnector.editUser(this, info);
 	}
 	
+	/**
+	 * Get the user info for displaying on the edit user page
+	 * 
+	 * @return A string representing the info in a JSON format
+	 */
 	public String getInfo() {
 		JSONObject info = new JSONObject();
 		info.put("gamesPlayed", this.gamesPlayed);
@@ -174,7 +220,14 @@ public class User {
 		return id;
 	}
 	
+	public String getSessionId() {
+		return this.session.getId();
+	}
+	
 	public void setSession(Session session) {
+		sessionIdsToUsers.remove(this.session.getId());
+		sessionIdsToUsers.put(session.getId(), this);
+		
 		this.session = session;
 		this.session.setMaxTextMessageBufferSize(524288);
 	}
@@ -231,8 +284,21 @@ public class User {
 		return defaultColor;
 	}
 	
+	public void setDestroyer(Thread destroyer) {
+		this.destroyer = destroyer;
+	}
+	
+	public Thread getDestroyer() {
+		return this.destroyer;
+	}
+	
 	public static void add(User u) {
 		users.put(u.getId(), u);
+	}
+	
+	public static void remove(User u) {
+		users.remove(u.getId());
+		sessionIdsToUsers.remove(u.getSessionId());
 	}
 	
 	public static ArrayList<User> getJoiningUsers() {
@@ -251,7 +317,7 @@ public class User {
 		return users;
 	}
 	
-	public static void remove(String id) {
-		users.remove(id);
+	public static User getUserFromSessionId(String id) {
+		return sessionIdsToUsers.get(id);
 	}
 }

@@ -21,10 +21,11 @@ public class Handler {
 	 
 	@OnClose
 	public void onClose(CloseReason c, Session session) {
-		System.out.println("Connection Ended: " + c.getReasonPhrase());
+		System.out.println("Connection Ended: " + c.getCloseCode());
 		
-		// TODO: Add delete timer for users
-		
+		Thread destroyer = new Thread(new UserDestroyer(User.getUserFromSessionId(session.getId())));
+		User.getUserFromSessionId(session.getId()).setDestroyer(destroyer);
+		destroyer.start();
 	}
 	 
 	@OnMessage
