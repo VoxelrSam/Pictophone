@@ -1,5 +1,5 @@
 # [Pictophone](http://pictophone-env.rrwwgr9pf7.us-east-2.elasticbeanstalk.com/)
-This is a web app made for CS252. The idea project is a fun game involving both drawing and guessing.
+This is a web app made for CS252. The project is a fun game involving both drawing and guessing.
 
 [http://pictophone-env.rrwwgr9pf7.us-east-2.elasticbeanstalk.com/](http://pictophone-env.rrwwgr9pf7.us-east-2.elasticbeanstalk.com/)
 
@@ -21,7 +21,7 @@ This project makes use of [Apache Tomcat](https://tomcat.apache.org/) for the ba
 
 As for hosting, the project currently uses [AWS Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/), and the MySQL server is an [AWS RDS](https://aws.amazon.com/rds/) instance.
 
-*If you would like a full list of sources, they should be all listed out in [sources.txt](sources.txt)*
+*If you would like a full list of sources, they should all be listed out in [sources.txt](sources.txt)*
 
 ---
 
