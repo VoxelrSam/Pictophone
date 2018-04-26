@@ -163,7 +163,7 @@ function populatePage(json, card){
 												"</div>" +
 											"</div>";
 		} else {
-			if (!(json.stage == "init" || json.stage == "createRoomForm" || json.stage == "joinRoom"))
+			if (!(json.stage == "init" || json.stage == "createRoomForm" || json.stage == "joinRoom" || json.stage == "editUser"))
 				ids[ids.length - 1].innerHTML = "<span>" + sessionStorage["name"] + "</span>";
 		}
 		$(ids[ids.length - 1]).find("span").css({"color": json.nameColor});

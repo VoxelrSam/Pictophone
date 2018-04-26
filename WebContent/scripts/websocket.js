@@ -109,7 +109,7 @@ function onMessage(message){
  */
 function onClose(message){
 	console.log(message);
-	notify("danger", "Connection lost. The Server may have went down...");
+	notify("danger", "Connection lost.... Refresh the page.");
 }
 
 /**

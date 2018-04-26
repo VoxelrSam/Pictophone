@@ -229,7 +229,7 @@ public class Game {
 		users.remove(user);
 		user.setGame(null);
 		
-		if (this.owner.equals(user))
+		if (this.owner != null && this.owner.equals(user))
 			owner = null;
 		
 		// Kill the game if we lose too many
