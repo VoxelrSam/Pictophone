@@ -164,7 +164,6 @@ th{
 	font-size: 30px;
 	max-width:17%;
 	white-space: nowrap;
-	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
