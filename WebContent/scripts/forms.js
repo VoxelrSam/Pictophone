@@ -5,13 +5,13 @@
  */
  
 // Used for keeping track of the new name color chosen in the user edit page
- var newNameColor;
+ let newNameColor;
 
 /**
  * Validate and send form for creating a room
  */
 function createRoom(){
-	var message = {};
+	let message = {};
 	message.type = "createRoom";
 	
 	if (document.getElementById("username") != null)
@@ -55,7 +55,7 @@ function createRoom(){
  * Validate and send form for joining a public room
  */
 function joinPublicRoom(){
-	var message = {};
+	let message = {};
 	message.type = "joinRoom";
 	
 	if (document.getElementById("username") != null)
@@ -87,7 +87,7 @@ function joinPublicRoom(){
  * Validate and send form for joining a public room
  */
 function joinPrivateRoom(){
-	var message = {};
+	let message = {};
 	message.type = "joinRoom";
 	message.roomkey = document.getElementById("roomkey").value;
 	
@@ -113,7 +113,7 @@ function joinPrivateRoom(){
  * Send a typed prompt
  */
 function submitPrompt(){
-	var message = {};
+	let message = {};
 	message.type = "submitPrompt";
 	message.prompt = document.getElementById("promptInput").value;
 	
@@ -126,7 +126,7 @@ function submitPrompt(){
  * Send newly created drawing
  */
 function submitDrawing(){
-	var message = {};
+	let message = {};
 	message.type = "submitDrawing";
 	message.image = canvas.toDataURL('image/png');
 	
@@ -145,7 +145,7 @@ function submitDrawing(){
  * Send login information
  */
 function login(){
-	var message = {};
+	let message = {};
 	message.type = "login";
 	message.username = document.getElementById("loginUsername").value;
 	message.password = document.getElementById("loginPassword").value;
@@ -167,7 +167,7 @@ function login(){
  * Send signup information
  */
 function signup(){
-	var message = {};
+	let message = {};
 	message.type = "signup";
 	message.username = document.getElementById("signupUsername").value;
 	message.password = document.getElementById("signupPassword").value;
@@ -199,7 +199,7 @@ function signup(){
  * Send changed information from the edit user page
  */
 function saveUser(){
-	var message = {};
+	let message = {};
 	message.type = "saveUser";
 	
 	if (document.getElementById("name").value != sessionStorage["name"]){

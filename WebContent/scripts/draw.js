@@ -7,16 +7,16 @@
 // Drawing script adapted from William Mallone's tutorial
 // http://www.williammalone.com/articles/create-html5-canvas-javascript-drawing-app/#demo-complete
 
-var canvas;
-var context;
+let canvas;
+let context;
 
-var paint = false;
-var eraser = false;
-var color = "#0000ff";
-var clickX = new Array();
-var clickY = new Array();
-var clickDrag = new Array();
-var clickColor = new Array();
+let paint = false;
+let eraser = false;
+let color = "#0000ff";
+let clickX = new Array();
+let clickY = new Array();
+let clickDrag = new Array();
+let clickColor = new Array();
 
 /**
  * Initialize all the listeners needed for drawing
@@ -49,13 +49,13 @@ function initDrawer(){
 	$("#canvas").mousedown(function(e){
 		window.getSelection().removeAllRanges();
 		
-		var bodyRect = document.body.getBoundingClientRect(),
+		let bodyRect = document.body.getBoundingClientRect(),
 		canvasRect = this.getBoundingClientRect(),
 		offsetT = canvasRect.top - bodyRect.top,
 		offsetL = canvasRect.left - bodyRect.left;
 
-		var mouseX = e.pageX - offsetL;
-		var mouseY = e.pageY - offsetT;
+		let mouseX = e.pageX - offsetL;
+		let mouseY = e.pageY - offsetT;
 		
 		paint = true;
 		addClick(mouseX, mouseY);
@@ -64,7 +64,7 @@ function initDrawer(){
 
 	$("#canvas").mousemove(function(e){
 		if (paint){
-			var bodyRect = document.body.getBoundingClientRect(),
+			let bodyRect = document.body.getBoundingClientRect(),
 			canvasRect = this.getBoundingClientRect(),
 			offsetT = canvasRect.top - bodyRect.top,
 			offsetL = canvasRect.left - bodyRect.left;
@@ -113,7 +113,7 @@ function redraw(){
 	context.lineJoin = "round";
 	context.lineWidth = 5;
 	
-	for(var i = 0; i < clickX.length; i++){
+	for(let i = 0; i < clickX.length; i++){
 		context.beginPath();
 		if (clickDrag[i] && i){
 			context.moveTo(clickX[i - 1], clickY[i - 1]);
@@ -146,7 +146,7 @@ function clear(){
  * Resize the canvas to handle the various resolutions it can be
  */
 function resizeCanvas(){
-	var container = document.getElementById("canvasContainer");
+	let container = document.getElementById("canvasContainer");
 	
 	canvas.width = $(container).width();
 	canvas.height = $(container).height();

@@ -11,15 +11,15 @@
  */
 $.fn.extend({
   animateCss: function(animationName, callback) {
-    var animationEnd = (function(el) {
-      var animations = {
+    let animationEnd = (function(el) {
+      let animations = {
         animation: 'animationend',
         OAnimation: 'oAnimationEnd',
         MozAnimation: 'mozAnimationEnd',
         WebkitAnimation: 'webkitAnimationEnd'
       };
 
-      for (var t in animations) {
+      for (let t in animations) {
         if (el.style[t] !== undefined) {
           return animations[t];
         }
@@ -37,22 +37,22 @@ $.fn.extend({
 });
 
 // Used to keep track of individual notifications
-var notificationCounter = 0;
+let notificationCounter = 0;
 
 // Keep track of the last theme used as to not repeat them back to back
-var lastTheme = 10;
+let lastTheme = 10;
 
 // Timer variable used for stopping the timer
-var timer;
+let timer;
 
 // Keeps track of the game selected in the Public Games list
-var selectedGame;
+let selectedGame;
 
 // Keeps track of the complement color for the current scheme
-var complement;
+let complement;
 
 // Keeps track of if the web page is in focus
-var isInFocus = true;
+let isInFocus = true;
 
 window.onblur = function(){
 	isInFocus = false;
@@ -69,7 +69,7 @@ window.onfocus = function(){
  * @param mesage The message to be displayed
  */
 function notify(type, message){
-	var id = "notification-" + notificationCounter++;
+	let id = "notification-" + notificationCounter++;
 	
 	// Insert the notification
 	document.getElementById("alertFrame").innerHTML +=
@@ -108,7 +108,7 @@ function newCard(json){
 		initJSColor();
 	
 	// Theme and animate if we need to swap cards
-	var cards = document.getElementsByClassName("card");
+	let cards = document.getElementsByClassName("card");
 	if (cards.length == 2){
 		populatePage(json, cards[1]);
 		theme(cards[1]);
@@ -150,7 +150,7 @@ function populatePage(json, card){
 		document.getElementsByClassName("drawing")[0].src = json.image;
 		
 	if (sessionStorage["name"] !== "null" && document.getElementsByClassName("identifier") != null){
-		var ids = document.getElementsByClassName("identifier");
+		let ids = document.getElementsByClassName("identifier");
 		
 		if ((json.stage == "init" || json.stage == "createRoomForm" || json.stage == "joinRoom") && json.isLoggedIn){
 			ids[ids.length - 1].innerHTML = "<div class=\"dropdown\">" + 
@@ -209,11 +209,11 @@ function populatePage(json, card){
  * @param users The names of the users in the order that they responded
  */
 function buildTimeline(timeline, users){
-	var div = document.getElementById("timeline");
+	let div = document.getElementById("timeline");
 
-	for (var i = 0; i < timeline.length; i++){
-		var userDetails = users[i].split(";");
-		var name = "<span style=\"color:" + userDetails[1] + ";\">" + userDetails[0] + "</span>";
+	for (let i = 0; i < timeline.length; i++){
+		let userDetails = users[i].split(";");
+		let name = "<span style=\"color:" + userDetails[1] + ";\">" + userDetails[0] + "</span>";
 		
 		if (i % 2 == 0){
 			div.innerHTML +=
@@ -238,8 +238,8 @@ function buildTimeline(timeline, users){
  * @param card The card to theme
  */
 function theme(card){
-	var css;
-	var themeNumber = Math.floor(Math.random() * 5);
+	let css;
+	let themeNumber = Math.floor(Math.random() * 5);
 	
 	if (themeNumber == lastTheme)
 		themeNumber = (themeNumber + 1) % 5;
@@ -274,7 +274,7 @@ function theme(card){
 	$(card).css(css);
 	$(card).find("h1").css({"color": complement});
 	
-	var inverse = getInverse($(card).css("background-color"));
+	let inverse = getInverse($(card).css("background-color"));
 	
 	$(card).find(".btn").css({
 		"color": inverse,
@@ -282,8 +282,8 @@ function theme(card){
 		"background-color": "transparent"
 	});
 	
-	var background;
-	var color;
+	let background;
+	let color;
 	$(card).find(".btn").hover(function(){
 		if (this.style.background-color != inverse){
 			background = this.style.backgroundColor;
@@ -309,9 +309,9 @@ function theme(card){
  * @return The inverse hex color
  */
 function getInverse(color){
-	var r = (255 - color.slice(4, 7)).toString(16);
-	var g = (255 - color.slice(9, 12)).toString(16);
-	var b = (255 - color.slice(14, 17)).toString(16);
+	let r = (255 - color.slice(4, 7)).toString(16);
+	let g = (255 - color.slice(9, 12)).toString(16);
+	let b = (255 - color.slice(14, 17)).toString(16);
 	
 	if (r.length == 1)
 		r = '0' + r;
@@ -336,14 +336,14 @@ function transitionCards(cards){
 	}
 
 	// Pick a random animation
-	var animation = Math.floor(Math.random() * 8);
+	let animation = Math.floor(Math.random() * 8);
 	
 	// If animating the old card
 	if (animation <= 3){
 		$(cards[1]).css("z-index", "0");
 		$(cards[0]).css("z-index", "1");
 		
-		var name;
+		let name;
 		switch(animation){
 			case 0:
 				name = "rollOut";
@@ -368,7 +368,7 @@ function transitionCards(cards){
 		$(cards[0]).css("z-index", "0");
 		$(cards[1]).css("z-index", "1");
 		
-		var name;
+		let name;
 		switch(animation){
 			case 4:
 				name = "rollIn";
@@ -416,7 +416,7 @@ function continueTimer(){
  * Counts down and executes a submission at the end.
  */
 function tick(){
-	var time = sessionStorage["timer"];
+	let time = sessionStorage["timer"];
 	time--;
 	
 	sessionStorage["timer"] = time;
@@ -442,19 +442,19 @@ function tick(){
  * @param json An array full of users
  */
 function updateUsers(json){
-	var users = JSON.parse(json.users);
+	let users = JSON.parse(json.users);
 
 	if (document.getElementById("userCount") != null){
 		document.getElementById("userCount").innerHTML = users.length + "/" + json.roomsize;
 	}
 	
 	if (document.getElementsByClassName("identifier") != null){
-		var ids = document.getElementsByClassName("identifier");
+		let ids = document.getElementsByClassName("identifier");
 		
-		var names = "<span style=\"color:" + sessionStorage["nameColor"] + ";\">" + sessionStorage["name"] + "</span>";
+		let names = "<span style=\"color:" + sessionStorage["nameColor"] + ";\">" + sessionStorage["name"] + "</span>";
 		
-		for (var i = 0; i < users.length; i++){
-			var userDetails = users[i].split(";");
+		for (let i = 0; i < users.length; i++){
+			let userDetails = users[i].split(";");
 			if (userDetails[0] === sessionStorage["name"])
 				continue;
 		
@@ -475,7 +475,7 @@ function updateGameList(list){
 	if (document.getElementById("gamesList") == null)
 		return;
 		
-	var body = document.getElementById("gamesListBody");
+	let body = document.getElementById("gamesListBody");
 	body.innerHTML = "";
 	
 	if (list.length == 0){
@@ -486,8 +486,8 @@ function updateGameList(list){
 			"</tr>";
 	}
 	
-	for (var i = 0; i < list.length; i++){
-		var elements = list[i].split(";");
+	for (let i = 0; i < list.length; i++){
+		let elements = list[i].split(";");
 		
 		body.innerHTML += 
 				"<tr value=\"" + elements[0] + "\">" + 

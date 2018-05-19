@@ -5,13 +5,13 @@
  */
 
 // WebSocket to be used
-var webSocket;
+let webSocket;
 
 /**
  * Connect the WebSocket to the server (called by body's onLoad function)
  */
 function connect(){
-	var url;
+	let url;
 	if (window.location.protocol === "https:"){
 		url = "wss://";
 	} else {
@@ -72,7 +72,7 @@ function closeConnection(){
  */
 function onMessage(message){
 	// Parse message into JSON object
-	var json = JSON.parse(message.data);
+	let json = JSON.parse(message.data);
 	
 	if (json.type == "pong")
 		return;
@@ -125,7 +125,7 @@ function onError(message){
  * Retrieve required page from the server on initial connection or refresh
  */
 function getPage(){
-	var message = {};
+	let message = {};
 	
 	message.type = "getPage";
 	
